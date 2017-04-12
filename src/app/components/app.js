@@ -5,52 +5,51 @@ import $ from 'jquery';
 import _ from 'lodash';
 import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
+import Toggle from 'material-ui/Toggle';
 
 import '../../styles/style.less';
 
 injectTapEventPlugin();
 
+const initialElementSize = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0};
+
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {isLiveEditEnabled: false, showAllSlots: false}
   }
 
   render() {
     return (
       <MuiThemeProvider>
         <div>
-          <div id="ala-bala" data-name="dataName" draggable="true" onDragStart={this.handleDragStart.bind(this)}>test</div>
-          <button style={{zIndex: '1001'}} onClick={() => {console.log('test'); this.setState({...this.state})}}>Calculate</button>
-          <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
-            {this.getSlotWrappers().map((wrapper, index) => {
-              if (wrapper.type === 'SLOT') {
-                return <SlotContainer key={index} data={wrapper}/>
+          <div>
+            <Toggle
+              style={{width: '100px'}}
+              label="Live edit"
+              onToggle={((ev, value) => this.setState({...this.state, isLiveEditEnabled: value}))}
+            />
+            <Toggle
+              style={{width: '100px'}}
+              label="Show All"
+              disabled={!this.state.isLiveEditEnabled}
+              onToggle={((ev, value) => this.setState({...this.state, showAllSlots: value}))}
+            />
+          </div>
+          {this.state.isLiveEditEnabled ? <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
+            {this.getCmsElements().map((element, index) => {
+              if (element.type === 'SLOT') {
+                return <SlotContainer key={index} data={element}/>
               } else if (wrapper.type === 'WIDGET') {
-                return <WidgetContainer key={index} data={wrapper}/>
+                return <WidgetContainer key={index} data={element}/>
               } else {
                 return <div>UNKNOWN TYPE</div>
               }
-              {/*return <div onDragOver={this.handleDragover.bind(this)} onDrop={this.handleWidgetDrop.bind(this)} key={index} data-id={wrapper.id} style={wrapper.style}></div>*/}
             })}
-          </div>
+          </div> : false}
         </div>
       </MuiThemeProvider>
     );
-  }
-
-  handleWidgetDrop(event) {
-    console.log(event.target);
-    event.preventDefault();
-    var data = JSON.parse(event.dataTransfer.getData("itemId"));
-    console.log(data.id);
-  }
-
-  handleDragStart(event) {
-    event.dataTransfer.setData("itemId", JSON.stringify({id: event.target.id}));
-  }
-
-  handleDragover(event) {
-    event.preventDefault();
   }
 
   componentDidMount() {
@@ -69,47 +68,44 @@ export default class App extends Component {
     let result = {slots: [], widgets: [], emptySlots: []};
     let slots = $('start-cms-slot');
     for (let i = 0; i < slots.length; i++) {
-      if (!slots[i].id) {
+      let slotId = slots[i].id;
+
+      if (!slotId) {
         continue;
       }
-      let slotId = slots[i].id;
-      let slotCoordinates = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0};
-      let slotWidgets = [];
-      if ($((slots[i])).nextUntil('end-cms-slot').length === 1) {
-        slotWidgets = $((slots[i])).nextUntil('end-cms-slot').children('start-cms-widget');
-      } else {
-        slotWidgets = $($(slots[i])).nextUntil('end-cms-slot', 'start-cms-widget');
-      }
+
+      let slotCoordinates = {...initialElementSize};
+      let slotWidgets = this.getSlotWidgets(slots[i]);
 
       if (slots[i].id === 'empty-slot' && slotWidgets.length > 0) {
         continue;
       }
 
       for (let j = 0; j < slotWidgets.length; j++) {
-        let widget = $(slotWidgets[j]);
-        let widgetElements = widget.nextUntil('end-cms-widget');
-        if (widgetElements.length === 1 && $(widgetElements[0]).is('a') && $(widgetElements[0]).children().length === 1 && $($(widgetElements[0]).children()[0]).is('img')) {
-          widgetElements.push($(widgetElements[0]).children()[0]);
-        }
+        let widgetElements = this.getWidgetElements(slotWidgets[j]);
         let widgetCoordinate = this.getMaxCoordinate(widgetElements);
-        if (_.isEqual(widgetCoordinate, {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0})) {
+
+        if (_.isEqual(widgetCoordinate, initialElementSize)) {
           continue;
         }
+
         result.widgets.push({id: slotWidgets[j].id, coordinate: widgetCoordinate, slotId: slotId });
         slotCoordinates = this.objectMaxCoordinates(slotCoordinates, widgetCoordinate);
       }
-      if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0})) {
+
+      if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
         result.slots.push({id: slotId, coordinate: slotCoordinates});
       } else {
         result.emptySlots.push({id: slotId})
       }
 
     }
+
     return result;
   }
 
   getMaxCoordinate(elements) {
-    let result = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0};
+    let result = {...initialElementSize};
     for (let i = 0; i < elements.length; i++) {
       let elementCoordinates = elements[i].getBoundingClientRect();
       if (elementCoordinates.top === 0 && elementCoordinates.bottom === 0 && elementCoordinates.right === 0 && elementCoordinates.left === 0 ) {
@@ -121,6 +117,25 @@ export default class App extends Component {
     return result;
   }
 
+  getSlotWidgets(slot) {
+    if ($((slot)).nextUntil('end-cms-slot').length === 1) {
+      return $((slot)).nextUntil('end-cms-slot').children('start-cms-widget');
+    }
+
+    return $($(slot)).nextUntil('end-cms-slot', 'start-cms-widget');
+  }
+
+  getWidgetElements(widgetElement) {
+    let widget = $(widgetElement);
+    let widgetElements = widget.nextUntil('end-cms-widget');
+
+    if (widgetElements.length === 1 && $(widgetElements[0]).is('a') && $(widgetElements[0]).children().length === 1 && $($(widgetElements[0]).children()[0]).is('img')) {
+      widgetElements.push($(widgetElements[0]).children()[0]);
+    }
+
+    return widgetElements;
+  }
+
   objectMaxCoordinates(first, second) {
     return {
       top: Math.min(first.top, second.top),
@@ -130,14 +145,14 @@ export default class App extends Component {
     };
   }
 
-  getSlotWrappers() {
-    let wrappersCoordinate = this.getElementSize();
+  getCmsElements() {
+    let elementsCoordinate = this.getElementSize();
     let result = [];
-    _.forEach(wrappersCoordinate.slots, item => {
+    _.forEach(elementsCoordinate.slots, item => {
       result.push({type: 'SLOT', id: item.id, coordinate: this.getItemCoordinate(item)});
     });
 
-    _.forEach(wrappersCoordinate.widgets, item => {
+    _.forEach(elementsCoordinate.widgets, item => {
       result.push({type: 'WIDGET', id: item.id, coordinate: this.getItemCoordinate(item), slotId: item.slotId});
     });
 
@@ -147,7 +162,7 @@ export default class App extends Component {
   getItemCoordinate(item) {
     return {
       top: (item.coordinate.top - 100 + window.pageYOffset),
-      left: item.coordinate.left,
+      left: (item.coordinate.left + window.pageXOffset),
       width: (item.coordinate.right - item.coordinate.left),
       height: (item.coordinate.bottom - item.coordinate.top)
     }
