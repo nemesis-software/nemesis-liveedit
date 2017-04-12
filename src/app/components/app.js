@@ -88,6 +88,9 @@ export default class App extends Component {
       for (let j = 0; j < slotWidgets.length; j++) {
         let widget = $(slotWidgets[j]);
         let widgetElements = widget.nextUntil('end-cms-widget');
+        if (widgetElements.length === 1 && $(widgetElements[0]).is('a') && $(widgetElements[0]).children().length === 1 && $($(widgetElements[0]).children()[0]).is('img')) {
+          widgetElements.push($(widgetElements[0]).children()[0]);
+        }
         let widgetCoordinate = this.getMaxCoordinate(widgetElements);
         if (_.isEqual(widgetCoordinate, {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0})) {
           continue;
