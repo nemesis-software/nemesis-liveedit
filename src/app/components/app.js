@@ -3,6 +3,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import $ from 'jquery';
 import _ from 'lodash';
+import SlotContainer from './slot-container';
+import WidgetContainer from './widget-container';
 
 import '../../styles/style.less';
 
@@ -14,20 +16,41 @@ export default class App extends Component {
   }
 
   render() {
-    this.getElementSize();
     return (
       <MuiThemeProvider>
         <div>
-          test
+          <div id="ala-bala" data-name="dataName" draggable="true" onDragStart={this.handleDragStart.bind(this)}>test</div>
           <button style={{zIndex: '1001'}} onClick={() => {console.log('test'); this.setState({...this.state})}}>Calculate</button>
           <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
             {this.getSlotWrappers().map((wrapper, index) => {
-              return <div key={index} data-id={wrapper.id} style={wrapper.style}></div>
+              if (wrapper.type === 'SLOT') {
+                return <SlotContainer key={index} data={wrapper}/>
+              } else if (wrapper.type === 'WIDGET') {
+                return <WidgetContainer key={index} data={wrapper}/>
+              } else {
+                return <div>UNKNOWN TYPE</div>
+              }
+              {/*return <div onDragOver={this.handleDragover.bind(this)} onDrop={this.handleWidgetDrop.bind(this)} key={index} data-id={wrapper.id} style={wrapper.style}></div>*/}
             })}
           </div>
         </div>
       </MuiThemeProvider>
     );
+  }
+
+  handleWidgetDrop(event) {
+    console.log(event.target);
+    event.preventDefault();
+    var data = JSON.parse(event.dataTransfer.getData("itemId"));
+    console.log(data.id);
+  }
+
+  handleDragStart(event) {
+    event.dataTransfer.setData("itemId", JSON.stringify({id: event.target.id}));
+  }
+
+  handleDragover(event) {
+    event.preventDefault();
   }
 
   componentDidMount() {
@@ -39,7 +62,6 @@ export default class App extends Component {
   }
 
   handleScroll() {
-    console.log('here update');
     this.setState({...this.state});
   }
 
@@ -50,6 +72,7 @@ export default class App extends Component {
       if (!slots[i].id) {
         continue;
       }
+      let slotId = slots[i].id;
       let slotCoordinates = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0};
       let slotWidgets = [];
       if ($((slots[i])).nextUntil('end-cms-slot').length === 1) {
@@ -58,7 +81,7 @@ export default class App extends Component {
         slotWidgets = $($(slots[i])).nextUntil('end-cms-slot', 'start-cms-widget');
       }
 
-      if (slots[i].id === 'csid_' && slotWidgets.length > 0) {
+      if (slots[i].id === 'empty-slot' && slotWidgets.length > 0) {
         continue;
       }
 
@@ -69,16 +92,14 @@ export default class App extends Component {
         if (_.isEqual(widgetCoordinate, {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0})) {
           continue;
         }
-        result.widgets.push({id: slotWidgets[j].id, coordinate: widgetCoordinate});
+        result.widgets.push({id: slotWidgets[j].id, coordinate: widgetCoordinate, slotId: slotId });
         slotCoordinates = this.objectMaxCoordinates(slotCoordinates, widgetCoordinate);
       }
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0})) {
-        result.slots.push({id: slots[i].id, coordinate: slotCoordinates});
+        result.slots.push({id: slotId, coordinate: slotCoordinates});
       } else {
-        result.emptySlots.push({id: slots[i].id})
+        result.emptySlots.push({id: slotId})
       }
-
-      console.log('here1');
 
     }
     return result;
@@ -110,32 +131,23 @@ export default class App extends Component {
     let wrappersCoordinate = this.getElementSize();
     let result = [];
     _.forEach(wrappersCoordinate.slots, item => {
-      let style = {
-        position: 'absolute',
-        border: '2px solid blue',
-        top: (item.coordinate.top - 103 + window.pageYOffset) + 'px',
-        left: (item.coordinate.left - 3) + 'px',
-        width: (item.coordinate.right - item.coordinate.left + 6) + 'px',
-        height: (item.coordinate.bottom - item.coordinate.top + 6) + 'px'
-      };
-
-      result.push({style:style, id: item.id});
+      result.push({type: 'SLOT', id: item.id, coordinate: this.getItemCoordinate(item)});
     });
 
     _.forEach(wrappersCoordinate.widgets, item => {
-      let style = {
-        position: 'absolute',
-        border: '1px solid red',
-        top: (item.coordinate.top - 100 + window.pageYOffset) + 'px',
-        left: item.coordinate.left + 'px',
-        width: (item.coordinate.right - item.coordinate.left) + 'px',
-        height: (item.coordinate.bottom - item.coordinate.top) + 'px'
-      };
-
-      result.push({style:style, id: item.id});
+      result.push({type: 'WIDGET', id: item.id, coordinate: this.getItemCoordinate(item), slotId: item.slotId});
     });
 
     return result;
+  }
+
+  getItemCoordinate(item) {
+    return {
+      top: (item.coordinate.top - 100 + window.pageYOffset),
+      left: item.coordinate.left,
+      width: (item.coordinate.right - item.coordinate.left),
+      height: (item.coordinate.bottom - item.coordinate.top)
+    }
   }
 
 }
