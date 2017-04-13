@@ -115,8 +115,6 @@ export default class App extends Component {
         result.slots.push({id: slotId, coordinate: slotCoordinates});
       } else if (slotWidgets.length === 0) {
         result.emptySlots.push({id: slotId, coordinate: slots[i].getBoundingClientRect()})
-      } else {
-        console.log(slots[i]);
       }
 
     }
@@ -217,5 +215,4 @@ export default class App extends Component {
       height: (item.coordinate.bottom - item.coordinate.top)
     }
   }
-
 }
