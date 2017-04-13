@@ -33,14 +33,14 @@ export default class App extends Component {
               style={{width: '100px'}}
               label="Show All"
               disabled={!this.state.isLiveEditEnabled}
-              onToggle={((ev, value) => this.setState({...this.state, showAllSlots: value}))}
+              onToggle={this.handleToggleShowAll.bind(this)}
             />
           </div>
           {this.state.isLiveEditEnabled ? <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
             {this.getCmsElements().map((element, index) => {
               if (element.type === 'SLOT') {
                 return <SlotContainer key={index} data={element}/>
-              } else if (wrapper.type === 'WIDGET') {
+              } else if (element.type === 'WIDGET') {
                 return <WidgetContainer key={index} data={element}/>
               } else {
                 return <div>UNKNOWN TYPE</div>
@@ -64,6 +64,19 @@ export default class App extends Component {
     this.setState({...this.state});
   }
 
+  handleToggleShowAll(ev, value) {
+    let emptySlots = this.getAllEmptySlots();
+    let emptyWidgets = this.getEmptyWidgets();
+    if (value) {
+      $(emptySlots).addClass('empty-slot-container');
+      $(emptyWidgets).addClass('empty-widget-container');
+    } else {
+      $(emptySlots).removeClass('empty-slot-container');
+      $(emptyWidgets).removeClass('empty-widget-container');
+    }
+    this.setState({...this.state, showAllSlots: value});
+  }
+
   getElementSize() {
     let result = {slots: [], widgets: [], emptySlots: []};
     let slots = $('start-cms-slot');
@@ -83,7 +96,12 @@ export default class App extends Component {
 
       for (let j = 0; j < slotWidgets.length; j++) {
         let widgetElements = this.getWidgetElements(slotWidgets[j]);
-        let widgetCoordinate = this.getMaxCoordinate(widgetElements);
+        let widgetCoordinate;
+        if (widgetElements.length === 0 && this.state.showAllSlots) {
+          widgetCoordinate = slotWidgets[j].getBoundingClientRect();
+        } else {
+          widgetCoordinate = this.getMaxCoordinate(widgetElements);
+        }
 
         if (_.isEqual(widgetCoordinate, initialElementSize)) {
           continue;
@@ -95,10 +113,37 @@ export default class App extends Component {
 
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
         result.slots.push({id: slotId, coordinate: slotCoordinates});
+      } else if (slotWidgets.length === 0) {
+        result.emptySlots.push({id: slotId, coordinate: slots[i].getBoundingClientRect()})
       } else {
-        result.emptySlots.push({id: slotId})
+        console.log(slots[i]);
       }
 
+    }
+    return result;
+  }
+
+  getAllEmptySlots() {
+    let slots = $('start-cms-slot');
+    let result = [];
+    for (var i = 0; i < slots.length; i++) {
+      let slot = slots[i];
+      if ($((slot)).nextUntil('end-cms-slot').length === 0) {
+        result.push(slot);
+      }
+    }
+
+    return result;
+  }
+
+  getEmptyWidgets() {
+    let widgets = $('start-cms-slot:not("empty-slot")').nextUntil('end-cms-slot', 'start-cms-widget');
+    let result = [];
+    for (var i = 0; i < widgets.length; i++) {
+      let widget = widgets[i];
+      if ($((widget)).nextUntil('end-cms-widget').length === 0) {
+        result.push(widget);
+      }
     }
 
     return result;
@@ -155,6 +200,11 @@ export default class App extends Component {
     _.forEach(elementsCoordinate.widgets, item => {
       result.push({type: 'WIDGET', id: item.id, coordinate: this.getItemCoordinate(item), slotId: item.slotId});
     });
+    if (this.state.showAllSlots) {
+      _.forEach(elementsCoordinate.emptySlots, item => {
+        result.push({type: 'SLOT', id: item.id, coordinate: this.getItemCoordinate(item)});
+      });
+    }
 
     return result;
   }
