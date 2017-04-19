@@ -5,7 +5,8 @@ import $ from 'jquery';
 import _ from 'lodash';
 import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
-import Toggle from 'material-ui/Toggle';
+import NavigationBar from './navigation-bar';
+
 
 import '../../styles/style.less';
 
@@ -23,19 +24,7 @@ export default class App extends Component {
     return (
       <MuiThemeProvider>
         <div>
-          <div>
-            <Toggle
-              style={{width: '100px'}}
-              label="Live edit"
-              onToggle={((ev, value) => this.setState({...this.state, isLiveEditEnabled: value}))}
-            />
-            <Toggle
-              style={{width: '100px'}}
-              label="Show All"
-              disabled={!this.state.isLiveEditEnabled}
-              onToggle={this.handleToggleShowAll.bind(this)}
-            />
-          </div>
+          <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
           {this.state.isLiveEditEnabled ? <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
             {this.getCmsElements().map((element, index) => {
               if (element.type === 'SLOT') {
@@ -64,7 +53,11 @@ export default class App extends Component {
     this.setState({...this.state});
   }
 
-  handleToggleShowAll(ev, value) {
+  onToggleLiveEdit(ev, value) {
+    this.setState({...this.state, isLiveEditEnabled: value});
+  }
+
+  onToggleShowAll(ev, value) {
     let emptySlots = this.getAllEmptySlots();
     let emptyWidgets = this.getEmptyWidgets();
     if (value) {

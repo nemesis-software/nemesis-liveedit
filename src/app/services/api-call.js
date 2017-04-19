@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let baseUrl = null;
+let baseUrl = 'https://localhost:8112/storefront/rest/'; //TODO: get from url
 export default class ApiCall {
 
   static get(url, queryParams, contentType) {
@@ -46,11 +46,19 @@ export default class ApiCall {
     let result = {
       'Content-Type': contentType || 'application/json'
     };
-    let nemesisToken = document.getElementById('token').getAttribute('value');
+    let nemesisToken = this.getUrlVars()['token'];
     if (nemesisToken) {
       result['X-Nemesis-Token'] = nemesisToken;
     }
 
     return result;
+  }
+
+  static getUrlVars() {
+    let vars = {};
+    let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+      });
+    return vars;
   }
 }
