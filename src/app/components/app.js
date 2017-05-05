@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import $ from 'jquery';
 import _ from 'lodash';
 import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
-import NavigationBar from './navigation-bar';
-
+import NavigationBar from './navigation-bar/navigation-bar';
 
 import '../../styles/style.less';
 
-injectTapEventPlugin();
 
-const initialElementSize = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: 0, bottom: 0};
+const initialElementSize = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right: -1000000, bottom: -1000000};
 
 export default class App extends Component {
   constructor(props) {
@@ -22,22 +18,20 @@ export default class App extends Component {
 
   render() {
     return (
-      <MuiThemeProvider>
-        <div>
-          <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
-          {this.state.isLiveEditEnabled ? <div style={{zIndex: '1000000', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
-            {this.getCmsElements().map((element, index) => {
-              if (element.type === 'SLOT') {
-                return <SlotContainer key={index} data={element}/>
-              } else if (element.type === 'WIDGET') {
-                return <WidgetContainer key={index} data={element}/>
-              } else {
-                return <div>UNKNOWN TYPE</div>
-              }
-            })}
-          </div> : false}
-        </div>
-      </MuiThemeProvider>
+      <div>
+        <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
+        {this.state.isLiveEditEnabled ? <div style={{zIndex: '100', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
+          {this.getCmsElements().map((element, index) => {
+            if (element.type === 'SLOT') {
+              return <SlotContainer key={index} data={element}/>
+            } else if (element.type === 'WIDGET') {
+              return <WidgetContainer key={index} data={element}/>
+            } else {
+              return <div>UNKNOWN TYPE</div>
+            }
+          })}
+        </div> : false}
+      </div>
     );
   }
 
@@ -53,11 +47,12 @@ export default class App extends Component {
     this.setState({...this.state});
   }
 
-  onToggleLiveEdit(ev, value) {
-    this.setState({...this.state, isLiveEditEnabled: value});
+  onToggleLiveEdit() {
+    this.setState({...this.state, isLiveEditEnabled: !this.state.isLiveEditEnabled});
   }
 
-  onToggleShowAll(ev, value) {
+  onToggleShowAll() {
+    let value = !this.state.showAllSlots;
     let emptySlots = this.getAllEmptySlots();
     let emptyWidgets = this.getEmptyWidgets();
     if (value) {
@@ -117,7 +112,7 @@ export default class App extends Component {
   getAllEmptySlots() {
     let slots = $('start-cms-slot');
     let result = [];
-    for (var i = 0; i < slots.length; i++) {
+    for (let i = 0; i < slots.length; i++) {
       let slot = slots[i];
       if ($((slot)).nextUntil('end-cms-slot').length === 0) {
         result.push(slot);
@@ -130,7 +125,7 @@ export default class App extends Component {
   getEmptyWidgets() {
     let widgets = $('start-cms-slot:not("empty-slot")').nextUntil('end-cms-slot', 'start-cms-widget');
     let result = [];
-    for (var i = 0; i < widgets.length; i++) {
+    for (let i = 0; i < widgets.length; i++) {
       let widget = widgets[i];
       if ($((widget)).nextUntil('end-cms-widget').length === 0) {
         result.push(widget);
@@ -201,6 +196,7 @@ export default class App extends Component {
   }
 
   getItemCoordinate(item) {
+    console.log(item);
     return {
       top: (item.coordinate.top - 100 + window.pageYOffset),
       left: (item.coordinate.left + window.pageXOffset),

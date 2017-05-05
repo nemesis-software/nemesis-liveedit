@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SlotService from '../services/slot-service';
 
 export default class WidgetContainer extends Component {
   constructor(props) {
@@ -13,14 +14,26 @@ export default class WidgetContainer extends Component {
   }
 
   handleDragover(event) {
-    console.log('drag over');
     event.preventDefault();
   }
 
   handleDrop(event) {
     event.preventDefault();
-    var data = JSON.parse(event.dataTransfer.getData("itemData"));
-    console.log(data, this.props.data.slotId);
+    let data = JSON.parse(event.dataTransfer.getData("itemData"));
+    if (data.slotId === this.props.data.slotId) {
+      return;
+    }
+
+    let actionPromise = null;
+    if (!data.slotId) {
+      actionPromise = SlotService.addWidgetToSlot(this.props.data.slotId, data.id)
+    } else {
+      actionPromise = SlotService.changeWidgetSlot(data.slotId, this.props.data.slotId, data.id);
+    }
+
+    actionPromise.then(result => {
+      window.location.reload();
+    }, err => console.log(err));
   }
 
   handleDragStart(event) {
