@@ -196,7 +196,6 @@ export default class App extends Component {
   }
 
   getItemCoordinate(item) {
-    console.log(item);
     return {
       top: (item.coordinate.top - 100 + window.pageYOffset),
       left: (item.coordinate.left + window.pageXOffset),

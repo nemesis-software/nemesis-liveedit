@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
-
+import ConsolePopup from '../backend-console-popup';
 
 export default class Widget extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {openBackendConsolePopup: false};
   }
 
   render() {
@@ -18,11 +20,27 @@ export default class Widget extends Component {
     return (
       <OverlayTrigger placement="bottom" overlay={tooltip}>
         <div className="widget-element" draggable={true} onDragStart={this.handleDragStart.bind(this)}>
-            <i className="material-icons widget-icon">widgets</i> {this.props.widget.code}
+          <div onClick={this.handleClickWidgetMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
+            <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
+          </div>
+          <ConsolePopup open={this.state.openBackendConsolePopup}
+                        entityId="widget"
+                        entityName={this.props.widget.entityName}
+                        itemId={this.props.widget.id}
+                        onClose={() => this.setState({...this.state, openBackendConsolePopup: false})} />
+          <i className="material-icons widget-icon">widgets</i> {this.props.widget.code}
         </div>
       </OverlayTrigger>
 
     );
+  }
+
+  handleClickWidgetMenu() {
+    if (this.state.openBackendConsolePopup) {
+      return;
+    }
+
+    this.setState({openBackendConsolePopup: true})
   }
 
   handleDragStart(event) {
