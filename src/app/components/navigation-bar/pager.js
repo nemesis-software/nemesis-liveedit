@@ -16,7 +16,7 @@ const styles = {
     fontSize: '30px'
   },
   container: {
-    display: 'inline-block',
+    textAlign: 'center',
     userSelect: 'none',
     margin: '0 10px'
   },

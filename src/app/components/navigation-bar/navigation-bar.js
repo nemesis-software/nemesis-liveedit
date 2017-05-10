@@ -9,25 +9,83 @@ import Pager from './pager';
 export default class NavigationBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {widgets: [], page: {}, filterSearchCode: null}
+    this.state = {widgets: [], page: {}, filterSearchCode: null, topBarX: 20, topBarY: 20};
+    this.mouseY = 0;
+    this.mouseX = 0;
+    this.isHoldOnTopBar = false;
   }
 
   componentWillMount() {
     this.getData(1, null);
+    let that = this;
+    document.onmousemove = (e) => {
+      if (that.isHoldOnTopBar) {
+        let actualX = NavigationBar.getValidActualX(that.state.topBarX + (e.pageX - that.mouseX));
+        let actualY = NavigationBar.getValidActualY(that.state.topBarY + (e.pageY - that.mouseY));
+        that.setState({...that.state, topBarX: actualX, topBarY: actualY});
+      }
+      that.mouseX = e.pageX;
+      that.mouseY = e.pageY;
+    };
+
+    document.onmouseup = (e) => {
+      if (that.isHoldOnTopBar) {
+        that.isHoldOnTopBar = false;
+      }
+    }
+  }
+
+  static getValidActualX(value) {
+    if (value < 0) {
+      return 0;
+    }
+    let windowWidth = $(window).width();
+
+    if (windowWidth < 260) {
+      return 0;
+    }
+
+    if (value > (windowWidth - 260)) {
+      return windowWidth - 260;
+    }
+
+    return value;
+  }
+
+  static getValidActualY(value) {
+    if (value < 0) {
+      return 0;
+    }
+    let windowHeight = $(window).height();
+
+    if (windowHeight < 510) {
+      return 0;
+    }
+
+    if (value > (windowHeight - 510)) {
+      return windowHeight - 510;
+    }
+
+    return value;
   }
 
   render() {
     return (
-      <div>
+      <div className="live-edit-nav-bar" style={{top: this.state.topBarY, left: this.state.topBarX, lineHeight: '1em'}}>
+        <div className="top-bar"
+             onMouseDown={() => this.isHoldOnTopBar = true}
+             onMouseUp={() => this.isHoldOnTopBar = false}>Cms Nav Bar</div>
         <div>
-          <label htmlFor="live-edit-switch">Live edit</label>
-          <Switch id="live-edit-switch" onChange={this.props.onToggleLiveEdit}/>
-          <label htmlFor="show-all-switch">Show all</label>
-          <Switch id="show-all-switch" onChange={this.props.onToggleShowAll}/>
-          <Pager page={this.state.page} onPagerChange={this.onPagerChange.bind(this)}/>
-          <div style={{display: 'inline-block', width: '256px'}}>
-            <input type="text" placeholder="Widget code" onChange={this.handleFilterInputChange.bind(this)}/>
+          <div className="switch-container">
+            <label htmlFor="live-edit-switch">Live edit</label>
+            <Switch id="live-edit-switch" onChange={this.props.onToggleLiveEdit}/>
+            <label style={{marginLeft: '10px'}} htmlFor="show-all-switch">Show all</label>
+            <Switch id="show-all-switch" onChange={this.props.onToggleShowAll}/>
           </div>
+        <Pager page={this.state.page} onPagerChange={this.onPagerChange.bind(this)}/>
+        <div style={{padding: '0 10px'}}>
+          <input className="search-field" type="text" placeholder="Widget code" onChange={this.handleFilterInputChange.bind(this)}/>
+        </div>
         </div>
         <WidgetLister widgets={this.state.widgets}/>
       </div>

@@ -17,32 +17,80 @@
   margin: 15px;
 }
 
-.widget-lister {
-  display: flex;
-  flex-wrap: nowrap !important;
-  overflow-x: auto;
+.live-edit-nav-bar {
+  top: 20px;
+  left: 20px;
+  position: fixed;
+  z-index: 1000;
+  width: 260px;
+  height: 510px;
+  border: solid 1px #555;
+  background-color: #eed;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  -moz-box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  -o-box-shadow: 0 0 10px rgba(0,0,0,0.6);
 
-  .widget-element {
-    padding: 10px 10px 10px 30px;
-    border: 1px solid red;
-    width: 10%;
-    position: relative;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    min-width: 180px;
-    white-space: nowrap;
+  .top-bar {
+    width: 100%;
+    height: 25px;
+    color: white;
+    background-color: @default-blue;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .search-field {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
     font-size: 14px;
-    line-height: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 
-    .widget-icon {
-      position: absolute;
-      left: 5px;
-      font-size: 20px;
-      top: 7px;
+  .switch-container {
+    padding: 5px;
+
+    label {
+      font-size: 14px;
     }
+  }
 
-    .widget-element-details {
-      position: absolute;
+  .widget-lister {
+    padding: 10px 0;
+
+    .widget-element {
+      padding: 10px 10px 10px 30px;
+      border: 1px solid red;
+      width: 90%;
+      margin: 1px auto;
+      position: relative;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      min-width: 180px;
+      white-space: nowrap;
+      font-size: 14px;
+      line-height: 14px;
+      border-radius: 5px;
+
+      .widget-icon {
+        position: absolute;
+        left: 5px;
+        font-size: 20px;
+        top: 7px;
+      }
+
+      .widget-element-details {
+        position: absolute;
+      }
     }
   }
 }

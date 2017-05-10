@@ -18,7 +18,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{zIndex: 100000000}}>
         <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
         {this.state.isLiveEditEnabled ? <div style={{zIndex: '100', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
           {this.getCmsElements().map((element, index) => {
@@ -85,7 +85,8 @@ export default class App extends Component {
       for (let j = 0; j < slotWidgets.length; j++) {
         let widgetElements = this.getWidgetElements(slotWidgets[j]);
         let widgetCoordinate;
-        if (widgetElements.length === 0 && this.state.showAllSlots) {
+//(widgetElements.length === 0 && slotWidgets[j].nextSibling.nodeValue) ||
+        if ( (widgetElements.length === 0 && this.state.showAllSlots)) {
           widgetCoordinate = slotWidgets[j].getBoundingClientRect();
         } else {
           widgetCoordinate = this.getMaxCoordinate(widgetElements);
@@ -127,7 +128,7 @@ export default class App extends Component {
     let result = [];
     for (let i = 0; i < widgets.length; i++) {
       let widget = widgets[i];
-      if ($((widget)).nextUntil('end-cms-widget').length === 0) {
+      if ($((widget)).nextUntil('end-cms-widget').length === 0 && !widget.nextSibling.nodeValue) {
         result.push(widget);
       }
     }

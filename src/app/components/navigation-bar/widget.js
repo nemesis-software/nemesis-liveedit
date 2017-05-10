@@ -18,9 +18,9 @@ export default class Widget extends Component {
       </Tooltip>
     );
     return (
-      <OverlayTrigger placement="bottom" overlay={tooltip}>
+      <OverlayTrigger placement="right" overlay={tooltip}>
         <div className="widget-element" draggable={true} onDragStart={this.handleDragStart.bind(this)}>
-          <div onClick={this.handleClickWidgetMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
+          <div onClick={this.handleClickWidgetMenu.bind(this)} style={{position: 'absolute', top: '0', right: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
             <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
           </div>
           <ConsolePopup open={this.state.openBackendConsolePopup}
