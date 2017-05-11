@@ -20,7 +20,7 @@ export default class App extends Component {
     return (
       <div style={{zIndex: 100000000}}>
         <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
-        {this.state.isLiveEditEnabled ? <div style={{zIndex: '100', position: 'absolute', top: '100px', left: '0', width: '100%', height: '1000px'}}>
+        {this.state.isLiveEditEnabled ? <div style={{zIndex: '100', position: 'absolute', top: '0', left: '0', width: '100%', height: '1000px'}}>
           {this.getCmsElements().map((element, index) => {
             if (element.type === 'SLOT') {
               return <SlotContainer key={index} data={element}/>
@@ -85,8 +85,9 @@ export default class App extends Component {
       for (let j = 0; j < slotWidgets.length; j++) {
         let widgetElements = this.getWidgetElements(slotWidgets[j]);
         let widgetCoordinate;
-//(widgetElements.length === 0 && slotWidgets[j].nextSibling.nodeValue) ||
-        if ( (widgetElements.length === 0 && this.state.showAllSlots)) {
+        if ( (widgetElements.length === 0 && slotWidgets[j].nextSibling.nodeValue)) {
+          widgetCoordinate = this.getCoordinateForSimpleTextWidget(slotWidgets[j]);
+        } else if ( (widgetElements.length === 0 && this.state.showAllSlots)) {
           widgetCoordinate = slotWidgets[j].getBoundingClientRect();
         } else {
           widgetCoordinate = this.getMaxCoordinate(widgetElements);
@@ -134,6 +135,16 @@ export default class App extends Component {
     }
 
     return result;
+  }
+
+  getCoordinateForSimpleTextWidget(widget) {
+    let coordinate = widget.getBoundingClientRect();
+    return {
+      top: coordinate.top,
+      left: coordinate.left,
+      bottom: coordinate.bottom + 17,
+      right: coordinate.right + 70,
+    };
   }
 
   getMaxCoordinate(elements) {
@@ -198,7 +209,7 @@ export default class App extends Component {
 
   getItemCoordinate(item) {
     return {
-      top: (item.coordinate.top - 100 + window.pageYOffset),
+      top: (item.coordinate.top + window.pageYOffset),
       left: (item.coordinate.left + window.pageXOffset),
       width: (item.coordinate.right - item.coordinate.left),
       height: (item.coordinate.bottom - item.coordinate.top)

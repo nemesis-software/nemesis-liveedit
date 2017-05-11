@@ -58,12 +58,8 @@ export default class NavigationBar extends Component {
     }
     let windowHeight = $(window).height();
 
-    if (windowHeight < 510) {
-      return 0;
-    }
-
-    if (value > (windowHeight - 510)) {
-      return windowHeight - 510;
+    if (value > (windowHeight - 60)) {
+      return windowHeight - 60;
     }
 
     return value;
