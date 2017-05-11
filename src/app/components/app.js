@@ -20,7 +20,7 @@ export default class App extends Component {
     return (
       <div style={{zIndex: 100000000}}>
         <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
-        {this.state.isLiveEditEnabled ? <div style={{zIndex: '100', position: 'absolute', top: '0', left: '0', width: '100%', height: '1000px'}}>
+        {this.state.isLiveEditEnabled ? <div style={{zIndex: '10000', position: 'absolute', top: '0', left: '0', width: '0', height: '0'}}>
           {this.getCmsElements().map((element, index) => {
             if (element.type === 'SLOT') {
               return <SlotContainer key={index} data={element}/>
@@ -208,11 +208,23 @@ export default class App extends Component {
   }
 
   getItemCoordinate(item) {
-    return {
+    let result = {
       top: (item.coordinate.top + window.pageYOffset),
       left: (item.coordinate.left + window.pageXOffset),
       width: (item.coordinate.right - item.coordinate.left),
       height: (item.coordinate.bottom - item.coordinate.top)
+    };
+
+    if (result.top < 0 && item.coordinate.bottom > 0) {
+      console.log(item.coordinate);
+      result.top = 5;
     }
+
+    if (result.left < 0 && item.coordinate.right > 0) {
+      console.log(item.coordinate);
+      result.left = 5;
+    }
+
+    return result;
   }
 }
