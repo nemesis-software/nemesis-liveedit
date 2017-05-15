@@ -9,7 +9,7 @@ import Pager from './pager';
 export default class NavigationBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {widgets: [], page: {}, filterSearchCode: null, topBarX: 20, topBarY: 20};
+    this.state = {widgets: [], page: {}, filterSearchCode: null, topBarX: 20, topBarY: 100};
     this.mouseY = 0;
     this.mouseX = 0;
     this.isHoldOnTopBar = false;
@@ -20,8 +20,8 @@ export default class NavigationBar extends Component {
     let that = this;
     document.onmousemove = (e) => {
       if (that.isHoldOnTopBar) {
-        let actualX = NavigationBar.getValidActualX(that.state.topBarX + (e.pageX - that.mouseX));
-        let actualY = NavigationBar.getValidActualY(that.state.topBarY + (e.pageY - that.mouseY));
+        let actualX = that.getValidActualX(that.state.topBarX + (e.pageX - that.mouseX));
+        let actualY = that.getValidActualY(that.state.topBarY + (e.pageY - that.mouseY));
         that.setState({...that.state, topBarX: actualX, topBarY: actualY});
       }
       that.mouseX = e.pageX;
@@ -35,7 +35,7 @@ export default class NavigationBar extends Component {
     }
   }
 
-  static getValidActualX(value) {
+  getValidActualX(value) {
     if (value < 0) {
       return 0;
     }
@@ -52,7 +52,7 @@ export default class NavigationBar extends Component {
     return value;
   }
 
-  static getValidActualY(value) {
+  getValidActualY(value) {
     if (value < 0) {
       return 0;
     }
@@ -80,7 +80,7 @@ export default class NavigationBar extends Component {
           </div>
         <Pager page={this.state.page} onPagerChange={this.onPagerChange.bind(this)}/>
         <div style={{padding: '0 10px'}}>
-          <input className="search-field" type="text" placeholder="Widget code" onChange={this.handleFilterInputChange.bind(this)}/>
+          <input className="nemesis-cms-input" type="text" placeholder="Widget code" onChange={this.handleFilterInputChange.bind(this)}/>
         </div>
         </div>
         <WidgetLister widgets={this.state.widgets}/>

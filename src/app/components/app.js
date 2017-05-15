@@ -16,6 +16,16 @@ export default class App extends Component {
     this.state = {isLiveEditEnabled: false, showAllSlots: false}
   }
 
+  componentWillMount() {
+    let urlVars = this.getUrlVars();
+    if (urlVars['token']) {
+      localStorage.setItem('privateToken', urlVars['token']);
+    }
+    if (urlVars['restUrl']) {
+      localStorage.setItem('restUrl', urlVars['restUrl']);
+    }
+  }
+
   render() {
     return (
       <div style={{zIndex: 100000000}}>
@@ -70,7 +80,7 @@ export default class App extends Component {
     let slots = $('start-cms-slot');
     for (let i = 0; i < slots.length; i++) {
       let slotId = slots[i].id;
-
+      let slotPosition = slots[i].getAttribute('dto-position');
       if (!slotId) {
         continue;
       }
@@ -104,7 +114,7 @@ export default class App extends Component {
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
         result.slots.push({id: slotId, coordinate: slotCoordinates});
       } else if (slotWidgets.length === 0) {
-        result.emptySlots.push({id: slotId, coordinate: slots[i].getBoundingClientRect()})
+        result.emptySlots.push({id: slotId, slotPosition: slotPosition, coordinate: slots[i].getBoundingClientRect()})
       }
 
     }
@@ -200,7 +210,7 @@ export default class App extends Component {
     });
     if (this.state.showAllSlots) {
       _.forEach(elementsCoordinate.emptySlots, item => {
-        result.push({type: 'SLOT', id: item.id, coordinate: this.getItemCoordinate(item)});
+        result.push({type: 'SLOT', id: item.id, slotPosition: item.slotPosition, coordinate: this.getItemCoordinate(item)});
       });
     }
 
@@ -226,5 +236,14 @@ export default class App extends Component {
     }
 
     return result;
+  }
+
+
+  getUrlVars() {
+    let vars = {};
+    let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
   }
 }

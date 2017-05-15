@@ -21,6 +21,29 @@ export default class SlotService {
     });
   }
 
+  static initializeSlot(slotCode, slotPosition, widgetId, pageId, templateId) {
+    let urlForCatalog = !!pageId ? `abstract_page/${pageId}/catalogVersion` : `abstract_template/${templateId}/catalogVersion`;
+    return ApiCall.get(urlForCatalog).then(result => {
+      return result.data.content.id;
+    }).then(catalogId => {
+      let newSlot = {
+        active: true,
+        code: slotCode,
+        catalogVersion: catalogId,
+        position: slotPosition,
+        widgets: [widgetId]
+      };
+
+      if (pageId) {
+        newSlot.page = pageId;
+      } else {
+        newSlot.template = templateId;
+      }
+
+      return ApiCall.post('cms_slot', newSlot)
+    });
+  }
+
   static changeWidgetSlot(oldSlotId, newSlotId, widgetId) {
     return this.addWidgetToSlot(newSlotId, widgetId).then(result => {
       return this.removeWidgetFromSlot(oldSlotId, widgetId);

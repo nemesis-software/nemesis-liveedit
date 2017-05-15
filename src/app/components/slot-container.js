@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import SlotService from '../services/slot-service';
 import ConsolePopup from './backend-console-popup';
+import CreateSlotPopup from './create-slot-popup';
 
 export default class SlotContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {openBackendConsolePopup: false};
+    this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null};
   }
 
   render() {
     return (
       <div style={this.getStyles()} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
-        <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'blue', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
+        {this.props.data.id !== 'empty-slot' ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'blue', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
-        </div>
-        <ConsolePopup open={this.state.openBackendConsolePopup}
+        </div> : false}
+        {this.props.data.id !== 'empty-slot' ?
+          <ConsolePopup open={this.state.openBackendConsolePopup}
                       entityId="cms_slot"
                       entityName="cms_slot"
                       itemId={this.props.data.id}
-                      onClose={() => this.setState({...this.state, openBackendConsolePopup: false})} />
+                      onClose={() => this.setState({...this.state, openBackendConsolePopup: false})} /> :
+          <CreateSlotPopup open={this.state.openCreateSlotPopup} position={this.props.data.slotPosition} oldSlotId={this.state.oldSlotId} widgetId={this.state.droppedWidgetId}/>}
       </div>
     );
   }
@@ -32,7 +35,7 @@ export default class SlotContainer extends Component {
       return;
     }
 
-    this.setState({openBackendConsolePopup: true})
+    this.setState({...this.state, openBackendConsolePopup: true})
   }
 
   handleDrop(event) {
@@ -43,7 +46,10 @@ export default class SlotContainer extends Component {
     }
 
     let actionPromise = null;
-    if (!data.slotId) {
+    if (this.props.data.id === 'empty-slot') {
+      this.setState({...this.state, droppedWidgetId: data.id, oldSlotId: data.slotId, openCreateSlotPopup: true});
+      return;
+    } else if (!data.slotId) {
       actionPromise = SlotService.addWidgetToSlot(this.props.data.id, data.id)
     } else {
       actionPromise = SlotService.changeWidgetSlot(data.slotId, this.props.data.id, data.id);
@@ -56,9 +62,10 @@ export default class SlotContainer extends Component {
 
   getStyles() {
     let coordinate = this.props.data.coordinate;
+    let borderStyle = this.props.data.id === 'empty-slot' ? '2px dashed green' : '2px dashed blue';
     return {
       position: 'absolute',
-      border: '2px dashed blue',
+      border: borderStyle,
       top: (coordinate.top - 5) + 'px',
       left: (coordinate.left - 5) + 'px',
       width: (coordinate.width + 10) + 'px',
