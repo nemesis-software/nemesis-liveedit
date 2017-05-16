@@ -13,8 +13,9 @@ export default class Widget extends Component {
   render() {
     const tooltip = (
       <Tooltip id="tooltip">
-        <div>{this.props.widget.code}</div>
-        <div>{this.props.widget.name}</div>
+        <div style={{wordBreak: 'break-all'}}>{this.props.widget.code}</div>
+        <div style={{wordBreak: 'break-all'}}>{this.props.widget.name}</div>
+        <div style={{wordBreak: 'break-all'}}>{this.props.widget.catalogVersion}</div>
       </Tooltip>
     );
     return (

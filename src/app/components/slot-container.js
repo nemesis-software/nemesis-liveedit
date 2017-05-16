@@ -21,7 +21,11 @@ export default class SlotContainer extends Component {
                       entityName="cms_slot"
                       itemId={this.props.data.id}
                       onClose={() => this.setState({...this.state, openBackendConsolePopup: false})} /> :
-          <CreateSlotPopup open={this.state.openCreateSlotPopup} position={this.props.data.slotPosition} oldSlotId={this.state.oldSlotId} widgetId={this.state.droppedWidgetId}/>}
+          <CreateSlotPopup open={this.state.openCreateSlotPopup}
+                           position={this.props.data.slotPosition}
+                           oldSlotId={this.state.oldSlotId}
+                           widgetId={this.state.droppedWidgetId}
+                           onClose={() => this.setState({...this.state, openCreateSlotPopup: false})}/>}
       </div>
     );
   }

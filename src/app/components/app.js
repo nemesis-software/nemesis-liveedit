@@ -139,7 +139,7 @@ export default class App extends Component {
     let result = [];
     for (let i = 0; i < widgets.length; i++) {
       let widget = widgets[i];
-      if ($((widget)).nextUntil('end-cms-widget').length === 0 && !widget.nextSibling.nodeValue) {
+      if ($((widget)).nextUntil('end-cms-widget').length === 0 && (!widget.nextSibling || !widget.nextSibling.nodeValue)) {
         result.push(widget);
       }
     }

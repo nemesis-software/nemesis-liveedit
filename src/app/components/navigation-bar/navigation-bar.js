@@ -90,7 +90,7 @@ export default class NavigationBar extends Component {
 
   getData(page, code) {
     let url = 'widget/search/findByCatalogVersionCode';
-    let requestData = {page: page, size: 10, catalogVersionCode: 'Staged'};
+    let requestData = {page: page, size: 10, catalogVersionCode: 'Staged', projection: 'search'};
     if (code) {
       url = 'widget/search/findByCodeLikeAndCatalogVersionCode';
       requestData.code = '%' + code + '%';

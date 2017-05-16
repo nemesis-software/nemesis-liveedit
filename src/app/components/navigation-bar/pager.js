@@ -9,7 +9,8 @@ const styles = {
   },
   tableCell: {
     display: 'table-cell',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    lineHeight: '1'
   },
   navButton: {
     cursor: 'pointer',
