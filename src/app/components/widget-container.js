@@ -44,11 +44,11 @@ export default class WidgetContainer extends Component {
     let coordinate = this.props.data.coordinate;
     return {
       position: 'absolute',
-      border: '1px solid red',
-      top: (coordinate.top - 1) + 'px',
-      left: (coordinate.left - 1) + 'px',
-      width: (coordinate.width + 2) + 'px',
-      height: (coordinate.height + 2) + 'px'
+      border: '2px solid blue',
+      top: (coordinate.top - 2) + 'px',
+      left: (coordinate.left - 2) + 'px',
+      width: (coordinate.width + 4) + 'px',
+      height: (coordinate.height + 4) + 'px'
     }
   }
 }

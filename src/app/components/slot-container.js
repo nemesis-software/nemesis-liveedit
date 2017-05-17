@@ -12,7 +12,7 @@ export default class SlotContainer extends Component {
   render() {
     return (
       <div style={this.getStyles()} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
-        {this.props.data.id !== 'empty-slot' ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'blue', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
+        {this.props.data.id !== 'empty-slot' ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
         </div> : false}
         {this.props.data.id !== 'empty-slot' ?
@@ -66,7 +66,7 @@ export default class SlotContainer extends Component {
 
   getStyles() {
     let coordinate = this.props.data.coordinate;
-    let borderStyle = this.props.data.id === 'empty-slot' ? '2px dashed green' : '2px dashed blue';
+    let borderStyle = this.props.data.id === 'empty-slot' ? '2px dashed #00B74A' : '2px dashed red';
     return {
       position: 'absolute',
       border: borderStyle,

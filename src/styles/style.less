@@ -1,9 +1,5 @@
 @default-blue: #357492;
 
-* {
-  font-family: Roboto, sans-serif;
-}
-
 .empty-slot-container {
   display: inline-block;
   height: 22px;
@@ -16,7 +12,6 @@
   width: 70px;
   margin: 15px;
 }
-
 
 button.nemesis-cms-button {
   display: inline-block;
@@ -52,9 +47,9 @@ button.nemesis-cms-button {
   position: fixed;
   z-index: 100000;
   width: 260px;
-  height: 510px;
+  min-height: 510px;
   border: solid 1px #555;
-  background-color: #eed;
+  background-color: #ddd;
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
   -moz-box-shadow: 0 0 10px rgba(0,0,0,0.6);
   -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.6);
@@ -86,7 +81,9 @@ button.nemesis-cms-button {
 
     .widget-element {
       padding: 10px 10px 10px 30px;
-      border: 1px solid red;
+      border: 1px solid @default-blue;
+      background-color: @default-blue;
+      color: white;
       width: 90%;
       margin: 1px auto;
       position: relative;
