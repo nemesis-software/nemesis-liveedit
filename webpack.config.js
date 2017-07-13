@@ -5,7 +5,7 @@ module.exports = {
     './src/index.js'
   ],
   output: {
-    path: '/home/teodor.tunev/work/nemesis-archetype/src/main/webapp/resources/theme/common/js',
+    path: '/home/teo/work/nemesis-archetype/src/main/webapp/resources/theme/common/js',
     publicPath: '/',
     filename: 'liveEdit.js'
   },

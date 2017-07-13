@@ -21,9 +21,6 @@ export default class App extends Component {
     if (urlVars['token']) {
       localStorage.setItem('privateToken', urlVars['token']);
     }
-    if (urlVars['restUrl']) {
-      localStorage.setItem('restUrl', urlVars['restUrl']);
-    }
   }
 
   render() {

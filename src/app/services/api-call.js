@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let baseUrl = null;//'https://localhost:8112/storefront/rest/'; //TODO: get from url
+let baseUrl = null;
 let nemesisToken = null;
 export default class ApiCall {
 
@@ -37,7 +37,8 @@ export default class ApiCall {
 
   static getRestUrl() {
     if (!baseUrl) {
-      baseUrl = localStorage.getItem('restUrl');
+      let dataElement = $('#liveedit_data')[0];
+      baseUrl = dataElement.getAttribute('data-rest-url');
     }
 
     return baseUrl;
