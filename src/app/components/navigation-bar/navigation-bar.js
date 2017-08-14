@@ -16,7 +16,7 @@ export default class NavigationBar extends Component {
   }
 
   componentWillMount() {
-    this.getData(1, null);
+    this.getData(0, null);
     let that = this;
     document.onmousemove = (e) => {
       if (that.isHoldOnTopBar) {
@@ -115,7 +115,7 @@ export default class NavigationBar extends Component {
   handleFilterInputChange(e) {
     let value = e.target.value;
     this.setState({...this.state, filterSearchCode: value});
-    this.getData(1, value);
+    this.getData(0, value);
   }
 
 }
