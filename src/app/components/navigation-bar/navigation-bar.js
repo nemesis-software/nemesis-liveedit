@@ -70,7 +70,7 @@ export default class NavigationBar extends Component {
       <div className="live-edit-nav-bar" style={{top: this.state.topBarY, left: this.state.topBarX, lineHeight: '1em'}}>
         <div className="top-bar"
              onMouseDown={() => this.isHoldOnTopBar = true}
-             onMouseUp={() => this.isHoldOnTopBar = false}>Cms Nav Bar</div>
+             onMouseUp={() => this.isHoldOnTopBar = false}>Cms Nav Bar <div title="Close live edit" className="clear-live-edit" onClick={this.clearLiveEdit.bind(this)}>x</div></div>
         <div>
           <div className="switch-container">
             <label htmlFor="live-edit-switch">Live edit</label>
@@ -116,6 +116,10 @@ export default class NavigationBar extends Component {
     let value = e.target.value;
     this.setState({...this.state, filterSearchCode: value});
     this.getData(0, value);
+  }
+
+  clearLiveEdit() {
+    window.location.search = '?live_edit_view=false&clear=true';
   }
 
 }
