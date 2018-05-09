@@ -5,6 +5,8 @@ import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
 import NavigationBar from './navigation-bar/navigation-bar';
 
+import 'react-select/dist/react-select.css';
+
 import '../../styles/style.less';
 
 

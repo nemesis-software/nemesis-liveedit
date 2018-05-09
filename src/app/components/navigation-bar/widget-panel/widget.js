@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
-import ConsolePopup from '../backend-console-popup';
+import ConsolePopup from '../../backend-console-popup';
 
 export default class Widget extends Component {
   constructor(props) {
