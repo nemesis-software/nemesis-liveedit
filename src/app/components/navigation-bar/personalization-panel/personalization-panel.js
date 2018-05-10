@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import ApiCall from '../../../services/api-call';
 import UserDetailsRenderer from './user-details-renderer';
 import LogNewUser from './log-new-user';
 import Select from 'react-select';
 import PersonalizationFilter from './personalization-filters/personalization-filters'
+import axios from 'axios';
 
 export default class PersonalizationPanel extends Component {
   constructor(props) {
@@ -13,7 +13,13 @@ export default class PersonalizationPanel extends Component {
   }
 
   componentWillMount() {
-    ApiCall.get('https://localhost:8112/storefront/live-edit/user?site=samplestore-b2c').then(result => {
+    axios({
+      url: `${this.getBaseUrl()}/live-edit/user?site=${this.getSiteCode()}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(result => {
       this.setState({user: result.data});
     });
   }
@@ -73,7 +79,7 @@ export default class PersonalizationPanel extends Component {
   onLogoutClick() {
     let form = document.createElement('form');
     form.setAttribute('method', 'GET');
-    form.setAttribute('action', 'https://localhost:8112/storefront/logout/impersonate');
+    form.setAttribute('action', `${this.getBaseUrl()}/logout/impersonate?site=${this.getSiteCode()}`);
     document.body.appendChild(form);
     form.submit();
   }
@@ -84,5 +90,13 @@ export default class PersonalizationPanel extends Component {
     }
 
     return {};
+  }
+
+  getBaseUrl() {
+    return document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
+  }
+
+  getSiteCode() {
+    return document.getElementById('liveedit_data').getAttribute('data-site-code');
   }
 }

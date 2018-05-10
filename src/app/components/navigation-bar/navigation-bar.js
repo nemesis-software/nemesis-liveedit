@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import WidgetPanel from './widget-panel/widget-panel';
 import PersonalizationPanel from './personalization-panel/personalization-panel';
+import NavigationBottomBar from './navigation-bottom-bar';
 
 export default class NavigationBar extends Component {
   constructor(props) {
@@ -74,6 +75,8 @@ export default class NavigationBar extends Component {
         </div>
         <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} isHidden={this.state.isPersonalizationView}/>
         <PersonalizationPanel isHidden={!this.state.isPersonalizationView}/>
+        <hr/>
+        <NavigationBottomBar />
       </div>
     );
   }

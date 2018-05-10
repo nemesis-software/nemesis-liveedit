@@ -39,7 +39,7 @@ export default class PersonalizationFilters extends Component {
 
   getData(page, size) {
     this.props.setLoadingScreen();
-    ApiCall.get('https://localhost:8112/storefront/live-edit/filters?site=samplestore-b2c', {
+    ApiCall.get(`${this.getBaseUrl()}/live-edit/filters?site=${this.getSiteCode()}`, {
       page: page,
       size: size
     }).then(result => {
@@ -47,5 +47,14 @@ export default class PersonalizationFilters extends Component {
         this.props.setLoadingScreen(false);
       })
     })
+  }
+
+
+  getBaseUrl() {
+    return document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
+  }
+
+  getSiteCode() {
+    return document.getElementById('liveedit_data').getAttribute('data-site-code');
   }
 }

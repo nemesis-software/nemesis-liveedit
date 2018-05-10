@@ -46,15 +46,16 @@ export default class WidgetPanel extends Component {
   }
 
   getData(page, code) {
-    let url = 'widget/search/findByCatalogVersionCode';
-    let dataElement = $('#liveedit_data')[0];
-    let catalogVersion = dataElement.getAttribute('data-catalog-version');
-    let catalogVersionActual = catalogVersion || 'Staged';
-    let requestData = {page: page, size: 10, catalogVersionCode: catalogVersionActual, projection: 'search'};
+    let url = 'widget';
+    let catalogVersionIds = document.getElementById('liveedit_data').getAttribute('data-catalog-version-ids').split(',').map(item => {
+      return `catalogVersion/id eq ${item}`
+    });
+    let filter = `(${catalogVersionIds.join(' or ')})`;
     if (code) {
-      url = 'widget/search/findByCodeLikeAndCatalogVersionCode';
-      requestData.code = '%' + code + '%';
+      filter += ` and indexof(code, '${code}') ge 0`
     }
+    let requestData = {page: page, size: 10, projection: 'search', $filter: filter};
+
     ApiCall.get(url, requestData).then(result => {
       this.setState({widgets: this.mapCollectionData(result.data), page: result.data.page})
     })

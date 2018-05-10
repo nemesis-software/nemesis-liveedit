@@ -51,7 +51,7 @@ export default class LogNewUser extends Component {
     this.props.setLoadingScreen();
     let form = document.createElement('form');
     form.setAttribute('method', 'GET');
-    form.setAttribute('action', 'https://localhost:8112/storefront/login/impersonate');
+    form.setAttribute('action', `${this.getBaseUrl()}/login/impersonate?site=${this.getSiteCode()}`);
     let hiddenField = document.createElement("input");
     hiddenField.setAttribute('type', 'hidden');
     hiddenField.setAttribute('name', 'username');
@@ -60,5 +60,14 @@ export default class LogNewUser extends Component {
     form.appendChild(hiddenField);
     document.body.appendChild(form);
     form.submit();
+  }
+
+
+  getBaseUrl() {
+    return document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
+  }
+
+  getSiteCode() {
+    return document.getElementById('liveedit_data').getAttribute('data-site-code');
   }
 }

@@ -19,8 +19,17 @@ export default class FilterItem extends Component {
 
   onSwitchToggle() {
     this.props.setLoadingScreen();
-    ApiCall.put(`https://localhost:8112/storefront/live-edit/filter/${Object.keys(this.props.filter)[0]}`).then(() => {
+    ApiCall.put(`${this.getBaseUrl()}/live-edit/filter/${Object.keys(this.props.filter)[0]}?site=${this.getSiteCode()}`).then(() => {
       window.location.reload();
     })
+  }
+
+
+  getBaseUrl() {
+    return document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
+  }
+
+  getSiteCode() {
+    return document.getElementById('liveedit_data').getAttribute('data-site-code');
   }
 }
