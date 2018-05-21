@@ -3,6 +3,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
+import MessageSourceContainer from './message-source-container';
 import NavigationBar from './navigation-bar/navigation-bar';
 
 import 'react-select/dist/react-select.css';
@@ -35,6 +36,8 @@ export default class App extends Component {
               return <SlotContainer key={index} data={element}/>
             } else if (element.type === 'WIDGET') {
               return <WidgetContainer key={index} data={element}/>
+            } else if (element.type === 'MESSAGE_SOURCE') {
+              return <MessageSourceContainer key={index} data={element}/>
             } else {
               return <div>UNKNOWN TYPE</div>
             }
@@ -213,6 +216,18 @@ export default class App extends Component {
       _.forEach(elementsCoordinate.emptySlots, item => {
         result.push({type: 'SLOT', id: item.id, slotPosition: item.slotPosition, coordinate: this.getItemCoordinate(item)});
       });
+    }
+
+    return result.concat(this.getMessageSources());
+  }
+
+  getMessageSources() {
+    let result = [];
+    let messageSources = $('message-source-property');
+    for (let i = 0; i < messageSources.length; i++) {
+      let messageSource = messageSources[i];
+      let messageSourceId = messageSources[i].getAttribute('id');
+      result.push({type: 'MESSAGE_SOURCE', id: messageSourceId, coordinate: this.getItemCoordinate({coordinate: messageSource.getBoundingClientRect()})});
     }
 
     return result;
