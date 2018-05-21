@@ -41,6 +41,18 @@ button.nemesis-cms-button {
   }
 }
 
+.nemesis-button {
+  text-transform: uppercase;
+  background: #4cb2e2;
+  padding: 10px 25px;
+  color: white;
+  display: inline-block;
+  border: 1px solid #d3d3d3;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
 .live-edit-nav-bar {
   top: 100px;
   left: 20px;
@@ -78,7 +90,96 @@ button.nemesis-cms-button {
       right: 2px;
       line-height: 18px;
     }
+
+    .switch-view {
+      position: absolute;
+      background: #53c6fc;
+      width: 19px;
+      height: 19px;
+      font-size: 18px;
+      top: 2px;
+      left: 2px;
+      line-height: 18px;
+
+      .material-icons {
+        font-size: 20px;
+      }
+    }
   }
+
+  .log-new-user {
+    padding: 5px 10px;
+  }
+
+  .loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 100000;
+
+    .loading-icon {
+      font-size: 50px;
+      position: absolute;
+      top: ~"calc(50% - 25px)";
+      left: ~"calc(50% - 25px)";
+      color: #53c6fc;
+      animation: spin 1s infinite linear;
+      -webkit-animation: spin2 1s infinite linear;
+    }
+  }
+
+  .user-details-renderer {
+    padding: 5px 10px;
+    .user-image {
+      width: 50px;
+      height: 50px;
+    }
+
+    .user-names {
+      width: ~"calc(100% - 60px)";
+      display: inline-block;
+      vertical-align: top;
+      padding: 3px;
+      .user-display-name {
+        cursor: pointer;
+        font-size: 16px;
+        &:hover {
+          text-decoration: underline;
+          color: #4cb2e2;
+        }
+      }
+    }
+  }
+
+  .user-container {
+    height: 100px;
+  }
+
+  .filter-items-container {
+    margin-top: 10px;
+
+    .filter-item {
+      padding: 10px 5px;
+
+      .filter-item-name {
+        padding-top: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 80%;
+        display: inline-block;
+        font-size: 14px;
+      }
+
+      .rc-switch {
+        vertical-align: top;
+      }
+    }
+  }
+
+
 
   .switch-container {
     padding: 5px;
@@ -118,6 +219,43 @@ button.nemesis-cms-button {
         position: absolute;
       }
     }
+  }
+
+  .navigation-bottom-bar {
+    .navigation-bottom-bar-item {
+      padding: 5px;
+      display: inline-block;
+      width: 50%;
+      text-align: center;
+      cursor: pointer;
+
+      span {
+        font-size: 14px;
+        cursor: pointer;
+        &:hover {
+          color: #53c6fc;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(360deg);
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@-webkit-keyframes spin2 {
+  from {
+    -webkit-transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
   }
 }
 
@@ -447,4 +585,24 @@ label.create-for-label {
   margin-top: -5px;
   border-width: 0 5px 5px;
   border-bottom-color: @default-blue;
+}
+
+.Select {
+
+  .Select-control {
+    border-radius: 0;
+    border-color: #d3d3d3;
+  }
+
+  &.is-disabled {
+    & > .Select-control {
+      background-color: #eee;
+
+      .Select-value {
+        .Select-value-label {
+          color: #808080;
+        }
+      }
+    }
+  }
 }

@@ -22,7 +22,7 @@ export default class SlotService {
   }
 
   static initializeSlot(slotCode, slotPosition, widgetId, pageId, templateId) {
-    let urlForCatalog = !!pageId ? `abstract_page/${pageId}/catalogVersion` : `abstract_template/${templateId}/catalogVersion`;
+    let urlForCatalog = !!pageId ? `cms_page/${pageId}/catalogVersion` : `cms_template/${templateId}/catalogVersion`;
     return ApiCall.get(urlForCatalog).then(result => {
       return result.data.content.id;
     }).then(catalogId => {

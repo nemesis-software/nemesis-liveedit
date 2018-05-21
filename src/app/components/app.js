@@ -5,6 +5,8 @@ import SlotContainer from './slot-container';
 import WidgetContainer from './widget-container';
 import NavigationBar from './navigation-bar/navigation-bar';
 
+import 'react-select/dist/react-select.css';
+
 import '../../styles/style.less';
 
 
@@ -77,6 +79,8 @@ export default class App extends Component {
     let slots = $('start-cms-slot');
     for (let i = 0; i < slots.length; i++) {
       let slotId = slots[i].id;
+      let slotPageId = slots[i].getAttribute('pageId');
+      let slotTemplateId = slots[i].getAttribute('templateId');
       let slotPosition = slots[i].getAttribute('dto-position');
       if (!slotId) {
         continue;
@@ -109,7 +113,7 @@ export default class App extends Component {
       }
 
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
-        result.slots.push({id: slotId, coordinate: slotCoordinates});
+        result.slots.push({id: slotId, pageId: slotPageId, templateId: slotTemplateId, coordinate: slotCoordinates});
       } else if (slotWidgets.length === 0) {
         result.emptySlots.push({id: slotId, slotPosition: slotPosition, coordinate: slots[i].getBoundingClientRect()})
       }
@@ -199,7 +203,7 @@ export default class App extends Component {
     let elementsCoordinate = this.getElementSize();
     let result = [];
     _.forEach(elementsCoordinate.slots, item => {
-      result.push({type: 'SLOT', id: item.id, coordinate: this.getItemCoordinate(item)});
+      result.push({type: 'SLOT', id: item.id, pageId: item.pageId, templateId: item.templateId, coordinate: this.getItemCoordinate(item)});
     });
 
     _.forEach(elementsCoordinate.widgets, item => {
