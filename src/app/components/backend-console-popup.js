@@ -13,8 +13,8 @@ export default class BackendConsolePopup extends Component {
           <iframe style={{width: '100%', height: '600px'}} src={this.buildIFrameUrl()}></iframe>
         </Modal.Body>
         <Modal.Footer>
-          <button className="nemesis-cms-button" onClick={this.props.onClose}>Close</button>
-          <button className="nemesis-cms-button" onClick={() => window.location.reload()}>Reload changes</button>
+          <button className="nemesis-button decline-button" onClick={this.props.onClose}>Close</button>
+          <button className="nemesis-button success-button" style={{marginLeft: '5px'}} onClick={() => window.location.reload()}>Reload changes</button>
         </Modal.Footer>
       </Modal>
     );

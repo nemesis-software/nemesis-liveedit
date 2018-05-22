@@ -16,7 +16,7 @@ export default class LogNewUser extends Component {
                       value={this.state.value ? {value: this.state.value, label: this.state.value.code} : this.state.value}
                       onChange={(item) => this.onValueChange(item && item.value)}
                       loadOptions={this.getUsers.bind(this)}/>
-        <button style={{marginTop: '5px'}} className="nemesis-button" onClick={this.onLoginClick.bind(this)}>Log as user</button>
+        <button className="nemesis-button success-button" style={{width: '100%', height: 'unset', textAlign: 'center', marginTop: '5px'}} onClick={this.onLoginClick.bind(this)}>Log as user</button>
       </div>
     );
   }

@@ -34,8 +34,8 @@ export default class BackendConsolePopup extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="nemesis-cms-button" onClick={this.props.onClose}>Cancel</button>
-          <button className="nemesis-cms-button" onClick={this.onCreateButtonClick.bind(this)}>Create</button>
+          <button className="nemesis-button decline-button"  onClick={this.props.onClose}>Cancel</button>
+          <button className="nemesis-button success-button" style={{marginLeft: '5px'}} onClick={this.onCreateButtonClick.bind(this)}>Create</button>
         </Modal.Footer>
       </Modal>
     );

@@ -1,3 +1,5 @@
+@import './variables';
+
 @default-blue: #4cb2e2;
 
 .empty-slot-container {
@@ -13,45 +15,53 @@
   margin: 15px;
 }
 
-button.nemesis-cms-button {
+.nemesis-button {
+  text-transform: uppercase;
+  background: white;
+  padding: 10px 25px;
+  color: @dark-font-color;
   display: inline-block;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
+  height: 40px;
+  border: 1px solid @border-colors;
   cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #8c8c8c;
-  border-radius: 4px;
-  color: #333;
-  background-color: #fff;
-  margin: 0 3px;
 
-  &:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
+  &.dark-button {
+    color: white;
+    background: @dark-grey-darker;
+  }
+
+  &.decline-button {
+    color: white;
+    background: @light-grey-darker;
+  }
+
+  &.success-button {
+    color: white;
+    background: @main-blue-darker;
+
+    &:disabled {
+      background: lighten(@main-blue-darker, 20%);
+      cursor: not-allowed;
+    }
+  }
+
+  &.danger-button {
+    color: white;
+    background: @red-color;
   }
 }
 
-.nemesis-button {
-  text-transform: uppercase;
-  background: #4cb2e2;
-  padding: 10px 25px;
-  color: white;
-  display: inline-block;
-  border: 1px solid #d3d3d3;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-}
+//.nemesis-button {
+//  text-transform: uppercase;
+//  background: #4cb2e2;
+//  padding: 10px 25px;
+//  color: white;
+//  display: inline-block;
+//  border: 1px solid #d3d3d3;
+//  cursor: pointer;
+//  width: 100%;
+//  text-align: center;
+//}
 
 .live-edit-nav-bar {
   top: 100px;

@@ -41,8 +41,8 @@ export default class PersonalizationPanel extends Component {
           <div><UserDetailsRenderer user={this.state.user}/>
             <div style={{padding: '0 10px'}}>
               {this.state.user && this.state.user.username === 'anonymous' ?
-                <div className="nemesis-button" onClick={this.onLoginClick.bind(this)}>login</div> :
-                <div className="nemesis-button" onClick={this.onLogoutClick.bind(this)}>logout</div>
+                <div className="nemesis-button success-button" style={{width: '100%', height: 'unset', textAlign: 'center'}} onClick={this.onLoginClick.bind(this)}>login</div> :
+                <div className="nemesis-button success-button" style={{width: '100%', height: 'unset', textAlign: 'center'}} onClick={this.onLogoutClick.bind(this)}>logout</div>
               }
             </div>
           </div>
