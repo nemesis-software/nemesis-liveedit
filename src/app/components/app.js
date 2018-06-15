@@ -91,9 +91,18 @@ export default class App extends Component {
 
       let slotCoordinates = {...initialElementSize};
       let slotWidgets = this.getSlotWidgets(slots[i]);
-
       if (slots[i].id === 'empty-slot' && slotWidgets.length > 0) {
         continue;
+      }
+
+      let isSlotDirty = false;
+      if (slots[i].hasAttribute('sync-states')) {
+        let slotSyncStates = slots[i].getAttribute('sync-states');
+        if (!slotSyncStates) {
+          isSlotDirty = true;
+        } else if (slotSyncStates.indexOf('OUT_OF_SYNC') > -1) {
+          isSlotDirty = true;
+        }
       }
 
       for (let j = 0; j < slotWidgets.length; j++) {
@@ -111,12 +120,24 @@ export default class App extends Component {
           continue;
         }
 
-        result.widgets.push({id: slotWidgets[j].id, coordinate: widgetCoordinate, slotId: slotId });
+        let isWidgetDirty = false;
+        if (slotWidgets[j].hasAttribute('sync-states')) {
+          let widgetSyncStates = slotWidgets[j].getAttribute('sync-states');
+          if (!widgetSyncStates) {
+            isWidgetDirty = true;
+            isSlotDirty = true;
+          } else if (widgetSyncStates.indexOf('OUT_OF_SYNC') > -1) {
+            isWidgetDirty = true;
+            isSlotDirty = true;
+          }
+        }
+
+        result.widgets.push({id: slotWidgets[j].id, coordinate: widgetCoordinate, slotId: slotId, isDirty: isWidgetDirty});
         slotCoordinates = this.objectMaxCoordinates(slotCoordinates, widgetCoordinate);
       }
 
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
-        result.slots.push({id: slotId, pageId: slotPageId, templateId: slotTemplateId, coordinate: slotCoordinates});
+        result.slots.push({id: slotId, pageId: slotPageId, templateId: slotTemplateId, coordinate: slotCoordinates, isDirty: isSlotDirty});
       } else if (slotWidgets.length === 0) {
         result.emptySlots.push({id: slotId, slotPosition: slotPosition, coordinate: slots[i].getBoundingClientRect()})
       }
@@ -206,11 +227,11 @@ export default class App extends Component {
     let elementsCoordinate = this.getElementSize();
     let result = [];
     _.forEach(elementsCoordinate.slots, item => {
-      result.push({type: 'SLOT', id: item.id, pageId: item.pageId, templateId: item.templateId, coordinate: this.getItemCoordinate(item)});
+      result.push({type: 'SLOT', id: item.id, isDirty: item.isDirty, pageId: item.pageId, templateId: item.templateId, coordinate: this.getItemCoordinate(item)});
     });
 
     _.forEach(elementsCoordinate.widgets, item => {
-      result.push({type: 'WIDGET', id: item.id, coordinate: this.getItemCoordinate(item), slotId: item.slotId});
+      result.push({type: 'WIDGET', id: item.id, coordinate: this.getItemCoordinate(item), slotId: item.slotId, isDirty: item.isDirty});
     });
     if (this.state.showAllSlots) {
       _.forEach(elementsCoordinate.emptySlots, item => {

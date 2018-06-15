@@ -15,6 +15,9 @@ export default class SlotContainer extends Component {
         {this.props.data.id !== 'empty-slot' ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
         </div> : false}
+        {this.props.data.isDirty ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '-2px', right: '-2px', background: 'red', height: '20px', width: '20px', zIndex: '5'}}>
+          <i className="material-icons" style={{color: 'white', position: 'absolute', top: '0', left: '0', fontSize: '20px'}}>sync_problem</i>
+        </div> : false}
         {this.props.data.id !== 'empty-slot' ?
           <ConsolePopup open={this.state.openBackendConsolePopup}
                       entityId="cms_slot"
