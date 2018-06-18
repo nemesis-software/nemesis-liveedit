@@ -67,6 +67,11 @@ export default class SlotContainer extends Component {
   getStyles() {
     let coordinate = this.props.data.coordinate;
     let borderStyle = this.props.data.id === 'empty-slot' ? '2px dashed #00B74A' : '2px dashed red';
+    if (this.props.data.id === 'empty-slot') {
+      borderStyle = '2px dashed #00B74A';
+    } else {
+      borderStyle = this.props.data.templateId === null ? '2px dashed red' : '2px dashed cyan';
+    }
     return {
       position: 'absolute',
       border: borderStyle,
