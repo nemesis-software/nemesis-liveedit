@@ -14,7 +14,7 @@ export default class NavigationBottomBar extends Component {
 
   render() {
     return (
-      <div className="navigation-bottom-bar">
+      <div className="navigation-bottom-bar" style={this.getContainerStyle()}>
         <div className="navigation-bottom-bar-item"><span title={this.pageCode} onClick={() => this.openConsolePopup('cms_page', this.pageId)}>Page</span></div>
         <div className="navigation-bottom-bar-item"><span title={this.templateCode} onClick={() => this.openConsolePopup('cms_template', this.templateId)}>Template</span></div>
         {this.state.openBackendConsolePopup ? <ConsolePopup open={this.state.openBackendConsolePopup}
@@ -28,5 +28,13 @@ export default class NavigationBottomBar extends Component {
 
   openConsolePopup(selectedType, selectedId) {
     this.setState({selectedType: selectedType, selectedId: selectedId, openBackendConsolePopup: true})
+  }
+
+  getContainerStyle() {
+    if (this.props.isHidden) {
+      return {display: 'none'};
+    }
+
+    return {};
   }
 }

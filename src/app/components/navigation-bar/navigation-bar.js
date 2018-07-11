@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import WidgetPanel from './widget-panel/widget-panel';
 import PersonalizationPanel from './personalization-panel/personalization-panel';
 import NavigationBottomBar from './navigation-bottom-bar';
+import IndexQueryConfig from "source/app/components/index-query-config/index-query-config";
+
+const LIVE_EDIT = 'live_edit';
+const SEARCH_CONFIG = 'search_config';
+const PERSONALIZATION = 'personalization';
 
 export default class NavigationBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {topBarX: 20, topBarY: 100, isPersonalizationView: false};
+    let searchDataContainer = document.getElementById('search-live-edit-meta');
+    this.state = {topBarX: 20, topBarY: 100, viewType: LIVE_EDIT, hasSearchData: !!searchDataContainer };
     this.mouseY = 0;
     this.mouseX = 0;
     this.isHoldOnTopBar = false;
@@ -69,14 +75,18 @@ export default class NavigationBar extends Component {
              onMouseUp={() => this.isHoldOnTopBar = false}>
           Cms Nav Bar
           <div title="Close live edit" className="clear-live-edit" onClick={this.clearLiveEdit.bind(this)}>x</div>
-          <div title="SwitchView" className="switch-view" onClick={this.onViewSwitch.bind(this)}>
-            {this.state.isPersonalizationView ? <i className="material-icons">settings</i> : <i className="material-icons">person</i>}
+          <div title="SwitchView" className="switch-personalization" onClick={() => this.onViewSwitch(PERSONALIZATION)}>
+            {this.state.viewType === PERSONALIZATION ? <i className="material-icons">settings</i> : <i className="material-icons">person</i>}
           </div>
+          {this.state.hasSearchData ? <div title="SwitchView" className="switch-search" onClick={() => this.onViewSwitch(SEARCH_CONFIG)}>
+            {this.state.viewType === SEARCH_CONFIG ? <i className="material-icons">settings</i> : <i className="material-icons">search</i>}
+          </div> : false}
         </div>
-        <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} isHidden={this.state.isPersonalizationView}/>
-        <PersonalizationPanel isHidden={!this.state.isPersonalizationView}/>
+        <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} isHidden={this.state.viewType !== LIVE_EDIT}/>
+        <PersonalizationPanel isHidden={this.state.viewType !== PERSONALIZATION}/>
+        {this.state.hasSearchData ? <IndexQueryConfig isHidden={this.state.viewType !== SEARCH_CONFIG}/> : false}
         <hr/>
-        <NavigationBottomBar />
+        <NavigationBottomBar isHidden={this.state.viewType === SEARCH_CONFIG}/>
       </div>
     );
   }
@@ -85,8 +95,12 @@ export default class NavigationBar extends Component {
     window.location.search = '?live_edit_view=false&clear=true';
   }
 
-  onViewSwitch() {
-    this.setState({isPersonalizationView: !this.state.isPersonalizationView});
+  onViewSwitch(viewType) {
+    if (this.state.viewType === viewType) {
+      this.setState({viewType: LIVE_EDIT});
+    } else {
+      this.setState({viewType: viewType});
+    }
   }
 
 }
