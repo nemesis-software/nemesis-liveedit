@@ -25,23 +25,23 @@ export default class PropertyQueryConfigEditor extends Component {
   render() {
     const data = this.props.data.data;
     return (
-      <div className="index-query-config-editor">
-        <div>{this.props.data.name}</div>
-        <div>{this.props.selectedSearch !== data.code ? `Fallback from ${data.code}` : false}</div>
+      <div className="property-query-config-editor">
+        <div className="field-name">{this.props.data.name}</div>
+        <div className="fallback-from">{this.props.selectedSearch !== data.code ? `Fallback from: ${data.code}` : false}</div>
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Boost"} name={'boost'} value={data.boost}/>
         <NemesisTextField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Fuzziness"} name={'fuzziness'} value={data.fuzziness}/>
         <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Sort Direction"} name={'sortDirection'} values={['ASC', 'DESC']} value={['ASC', 'DESC'].indexOf(data.sortDirection)}/>
         <NemesisBooleanField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Sortable"} name={'sortable'} value={data.sortable} />
         <NemesisBooleanField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Highlight"} name={'highlight'} value={data.highlight} />
         <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"search_facet"} label={"Facet"} name={'searchFacet'} value={data.searchFacet} />
-        {this.props.selectedSearch !== data.code ? <div>
+        {this.props.selectedSearch !== data.code ? <div style={{margin: '5px 0'}}>
           <label className="checkbox-inline">
             <input type="checkbox" className={"nemesis-checkbox" + (this.state.createForSpecifiedSearch ? ' active' : '')}
-                   onChange={() => this.setState({createForSpecifiedSearch: !this.state.createForSpecifiedSearch})}/>
+                   onChange={() => this.setState({createForSpecifiedSearch: !this.state.createForSpecifiedSearch})} style={{height: '15px', width: '15px', verticalAlign: 'middle'}}/>
             Create for selected search
           </label>
         </div> : false}
-        <button onClick={this.onSaveButtonClick.bind(this)}>Save</button>
+        <div style={{textAlign: 'center', marginTop: '10px'}}><button style={{width: '80%', padding: '7px 25px', height: '34px'}} className="nemesis-button success-button" onClick={this.onSaveButtonClick.bind(this)}>Save</button></div>
       </div>
     );
   }
@@ -56,7 +56,6 @@ export default class PropertyQueryConfigEditor extends Component {
       return;
     }
 
-    console.log(this.props.data);
     const data = this.props.data.data;
     let resultObject = !this.state.createForSpecifiedSearch && data.id  ? {} : {
       ...data,
@@ -72,7 +71,7 @@ export default class PropertyQueryConfigEditor extends Component {
 
     let url = `https://localhost:8112/storefront/rest/${restUrl}`;
     ApiCall[restMethod](url, resultObject).then(result => {
-      console.log('saved');
+      alert('saved');
     })
   }
 

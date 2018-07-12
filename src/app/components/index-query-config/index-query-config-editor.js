@@ -31,7 +31,7 @@ export default class IndexQueryConfigEditor extends Component {
         <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Default Sort Direction"} name={'defaultSortDirection'} values={['ASC', 'DESC']} value={['ASC', 'DESC'].indexOf(data.defaultSortDirection)}/>
         <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Multi Term Operator"} name={'multiTermOperator'} values={['AND', 'OR']} value={['AND', 'OR'].indexOf(data.multiTermOperator)}/>
         <NemesisSimpleCollectionField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Default Sorts"} name={'defaultSorts'} value={data.defaultSorts}/>
-        <button onClick={this.onSaveButtonClick.bind(this)}>Save</button>
+        <div style={{textAlign: 'center', marginTop: '10px'}}><button style={{width: '80%', padding: '7px 25px', height: '34px'}} className="nemesis-button success-button" onClick={this.onSaveButtonClick.bind(this)}>Save</button></div>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export default class IndexQueryConfigEditor extends Component {
 
     let url = `search_index_query_config/${this.props.data.id}`;
     ApiCall.patch(url, resultObject).then(result => {
-      console.log('saved');
+      alert('saved');
     })
   }
 

@@ -17,10 +17,11 @@ export default class PropertyQueryConfig extends Component {
           <div>
             <Select style={{width: '100%'}}
                     clearable={false}
+                    placeholder={'Add property'}
                     arrowRenderer={() => <SelectCustomArrow/>}
                     onChange={(item) => this.onIndexPropertySelect(item.value)}
                     options={this.getAllowedIndexedProperties()}/>
-            {this.props.data.map(prop => <div onClick={() => this.setState({selectedProperty: prop})}
+            {this.props.data.map(prop => <div className="property-query-item" onClick={() => this.setState({selectedProperty: prop})}
                                            key={prop.name}>{prop.name}</div>)}
           </div>
         }
@@ -37,8 +38,6 @@ export default class PropertyQueryConfig extends Component {
     this.props.data.forEach(item => {
       configuratedProperties.push(item.data.indexedProperty.id);
     });
-
-    console.log(configuratedProperties);
 
     return this.props.indexedProperties.filter(p => configuratedProperties.indexOf(p.id) === -1).map(p => {
       return {value: p, label: p.code}

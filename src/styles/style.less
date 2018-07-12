@@ -631,7 +631,79 @@ label.create-for-label {
     }
   }
 }
-.collection-container {
-  max-height: 108px;
-  overflow-y: auto;
+
+
+.entity-field {
+  width: 100%;
+  height: 36px;
+}
+
+.index-query-config {
+  .select-search-code {
+    text-align: center;
+    padding: 3px;
+    font-size: 14px;
+  }
+
+  .index-query-config-editor {
+    padding: 5px;
+  }
+
+  .collection-container {
+    max-height: 108px;
+    overflow-y: auto;
+    padding: 5px;
+
+    .chip {
+      border: 1px solid @main-blue;
+      padding: 2px;
+      margin: 3px 0;
+      background: white;
+
+      .chip-item {
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 16px;
+      }
+
+      .material-icons {
+        cursor: pointer;
+        font-size: 20px;
+        padding-left: 10px;
+        color: #888;
+
+        &:hover {
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .property-query-config {
+    padding: 5px;
+
+    .property-query-item {
+      margin: 5px 0;
+      background: @main-blue;
+      color: white;
+      font-size: 16px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .property-query-config-editor {
+    .field-name {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .fallback-from {
+      color: #eb0848;
+      text-align: center;
+      padding: 5px;
+    }
+  }
+
 }

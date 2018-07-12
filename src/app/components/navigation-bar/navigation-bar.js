@@ -85,7 +85,7 @@ export default class NavigationBar extends Component {
         <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} isHidden={this.state.viewType !== LIVE_EDIT}/>
         <PersonalizationPanel isHidden={this.state.viewType !== PERSONALIZATION}/>
         {this.state.hasSearchData ? <IndexQueryConfig isHidden={this.state.viewType !== SEARCH_CONFIG}/> : false}
-        <hr/>
+        {this.state.viewType !== SEARCH_CONFIG ? <hr/> : false}
         <NavigationBottomBar isHidden={this.state.viewType === SEARCH_CONFIG}/>
       </div>
     );

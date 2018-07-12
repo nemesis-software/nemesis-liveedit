@@ -8,7 +8,6 @@ import SelectCustomArrow from '../../helper-components/select-custom-arrow';
 export default class NemesisEnumField extends NemesisBaseField {
   constructor(props) {
     super(props);
-    console.log(props);
   }
 
   render() {
@@ -44,8 +43,6 @@ export default class NemesisEnumField extends NemesisBaseField {
   }
 
   getFormattedValue(value) {
-    console.log(this.props.values);
-    console.log(value);
     return this.props.values[value] ? this.props.values[value] : null;
   }
 

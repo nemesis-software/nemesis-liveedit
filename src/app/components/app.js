@@ -263,12 +263,10 @@ export default class App extends Component {
     };
 
     if (result.top < 0 && item.coordinate.bottom > 0) {
-      console.log(item.coordinate);
       result.top = 5;
     }
 
     if (result.left < 0 && item.coordinate.right > 0) {
-      console.log(item.coordinate);
       result.left = 5;
     }
 
