@@ -23,6 +23,9 @@ export default class BackendConsolePopup extends Component {
   buildIFrameUrl() {
     let dataElement = $('#liveedit_data')[0];
     let baseUrl = dataElement.getAttribute('data-backend-url');
+    if (this.props.newWidgetData) {
+      return `${baseUrl}#type=nemesisNewWidget&slotId=${this.props.newWidgetData.slotId}&iframePreview=true`;
+    }
     return `${baseUrl}#type=SINGLE_ITEM&itemId=${this.props.itemId}&entityId=${this.props.entityId}&entityName=${this.props.entityName}&iframePreview=true`;
   }
 }

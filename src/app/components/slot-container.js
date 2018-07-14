@@ -6,7 +6,7 @@ import CreateSlotPopup from './create-slot-popup';
 export default class SlotContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null};
+    this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null, newWidgetData: null};
   }
 
   render() {
@@ -18,17 +18,19 @@ export default class SlotContainer extends Component {
         {this.props.data.isDirty ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '-2px', right: '-2px', background: 'red', height: '20px', width: '20px', zIndex: '5'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '0', left: '0', fontSize: '20px'}}>sync_problem</i>
         </div> : false}
-        {this.props.data.id !== 'empty-slot' ?
+        {this.state.openBackendConsolePopup ?
           <ConsolePopup open={this.state.openBackendConsolePopup}
                       entityId="cms_slot"
+                      newWidgetData={this.state.newWidgetData}
                       entityName="cms_slot"
                       itemId={this.props.data.id}
-                      onClose={() => this.setState({...this.state, openBackendConsolePopup: false})} /> :
-          <CreateSlotPopup open={this.state.openCreateSlotPopup}
+                      onClose={() => this.setState({...this.state, openBackendConsolePopup: false, newWidgetData: null})} /> : false}
+        {this.state.openCreateSlotPopup?  <CreateSlotPopup open={this.state.openCreateSlotPopup}
                            position={this.props.data.slotPosition}
                            oldSlotId={this.state.oldSlotId}
                            widgetId={this.state.droppedWidgetId}
-                           onClose={() => this.setState({...this.state, openCreateSlotPopup: false})}/>}
+                           onEmptySlotInitilize={this.openCreateNewWidget.bind(this)}
+                           onClose={() => this.setState({...this.state, openCreateSlotPopup: false})}/>: false}
       </div>
     );
   }
@@ -45,6 +47,10 @@ export default class SlotContainer extends Component {
     this.setState({...this.state, openBackendConsolePopup: true})
   }
 
+  openCreateNewWidget(slotId) {
+    this.setState({openBackendConsolePopup: true, openCreateSlotPopup: false, newWidgetData: {slotId: slotId}});
+  }
+
   handleDrop(event) {
     event.preventDefault();
     let data = JSON.parse(event.dataTransfer.getData("itemData"));
@@ -55,6 +61,9 @@ export default class SlotContainer extends Component {
     let actionPromise = null;
     if (this.props.data.id === 'empty-slot') {
       this.setState({...this.state, droppedWidgetId: data.id, oldSlotId: data.slotId, openCreateSlotPopup: true});
+      return;
+    } else if (data.id === 'NEMESIS_NEW_WIDGET') {
+      this.openCreateNewWidget(this.props.data.id);
       return;
     } else if (!data.slotId) {
       actionPromise = SlotService.addWidgetToSlot(this.props.data.id, data.id)

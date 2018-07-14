@@ -21,7 +21,7 @@ export default class SlotService {
     });
   }
 
-  static initializeSlot(slotCode, slotPosition, widgetId, pageId, templateId) {
+  static initializeSlot(slotCode, slotPosition, widgets, pageId, templateId) {
     let urlForCatalog = !!pageId ? `cms_page/${pageId}/catalogVersion` : `cms_template/${templateId}/catalogVersion`;
     return ApiCall.get(urlForCatalog).then(result => {
       return result.data.content.id;
@@ -31,7 +31,7 @@ export default class SlotService {
         code: slotCode,
         catalogVersion: catalogId,
         position: slotPosition,
-        widgets: [widgetId]
+        widgets: widgets
       };
 
       if (pageId) {

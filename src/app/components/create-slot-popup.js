@@ -54,7 +54,12 @@ export default class BackendConsolePopup extends Component {
   onCreateButtonClick() {
     let pageId = this.state.isCreatedForPage ? this.viewInfo.pageId : null;
     let tempalteId = this.state.isCreatedForPage ? null :this.viewInfo.templateId;
-    SlotService.initializeSlot(this.state.slotCode, this.props.position, this.props.widgetId, pageId, tempalteId).then(() => {
+    let widgetsIds = this.props.widgetId === 'NEMESIS_NEW_WIDGET' ? [] : [this.props.widgetId];
+    SlotService.initializeSlot(this.state.slotCode, this.props.position, widgetsIds, pageId, tempalteId).then((result) => {
+      if (this.props.widgetId === 'NEMESIS_NEW_WIDGET') {
+        this.props.onEmptySlotInitilize(result.data.id);
+        return;
+      }
       if (this.props.oldSlotId) {
         SlotService.removeWidgetFromSlot(this.props.oldSlotId, this.props.widgetId).then(() => {
           window.location.reload();

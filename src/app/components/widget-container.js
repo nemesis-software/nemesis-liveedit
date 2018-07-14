@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import SlotService from '../services/slot-service';
+import ConsolePopup from './backend-console-popup';
 
 export default class WidgetContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {openBackendConsolePopup: false, newWidgetData: null}
   }
 
   render() {
     return (
       <div style={this.getStyles()} draggable="true" onDragStart={this.handleDragStart.bind(this)} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
+        {this.state.openBackendConsolePopup ? <ConsolePopup open={this.state.openBackendConsolePopup}
+                             newWidgetData={this.state.newWidgetData}
+                             onClose={() => this.setState({...this.state, openBackendConsolePopup: false, newWidgetData: null})} />: false}
       </div>
     );
   }
@@ -21,6 +26,11 @@ export default class WidgetContainer extends Component {
     event.preventDefault();
     let data = JSON.parse(event.dataTransfer.getData("itemData"));
     if (data.slotId === this.props.data.slotId) {
+      return;
+    }
+
+    if (data.id === 'NEMESIS_NEW_WIDGET') {
+      this.setState({openBackendConsolePopup: true, newWidgetData: {slotId: data.slotId}});
       return;
     }
 
