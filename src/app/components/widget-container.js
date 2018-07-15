@@ -30,7 +30,7 @@ export default class WidgetContainer extends Component {
     }
 
     if (data.id === 'NEMESIS_NEW_WIDGET') {
-      this.setState({openBackendConsolePopup: true, newWidgetData: {slotId: data.slotId}});
+      this.setState({openBackendConsolePopup: true, newWidgetData: {slotId: this.props.data.slotId}});
       return;
     }
 
