@@ -6,18 +6,20 @@ import CreateSlotPopup from './create-slot-popup';
 export default class SlotContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null, newWidgetData: null};
+    console.log(props);
+    this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null, newWidgetData: null, isDragover: false};
   }
 
   render() {
     return (
-      <div style={this.getStyles()} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
-        {this.props.data.id !== 'empty-slot' ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
+      <div style={this.getStyles()} onDragOver={this.handleDragover.bind(this)} onDragLeave={() => this.setState({isDragover: false})} onDrop={this.handleDrop.bind(this)}>
+        {this.props.data.id !== 'empty-slot' && !this.props.isWidgetOnDrag ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '0', left: '0', background: 'red', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
         </div> : false}
-        {this.props.data.isDirty ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '-2px', right: '-2px', background: 'red', height: '20px', width: '20px', zIndex: '5'}}>
+        {this.props.data.isDirty && !this.props.isWidgetOnDrag ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '-2px', right: '-2px', background: 'red', height: '20px', width: '20px', zIndex: '5'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '0', left: '0', fontSize: '20px'}}>sync_problem</i>
         </div> : false}
+        {this.state.isDragover ? <span style={{fontSize: '20px', padding: '3px'}}>{this.props.data.slotPosition}</span> : false}
         {this.state.openBackendConsolePopup ?
           <ConsolePopup open={this.state.openBackendConsolePopup}
                       entityId="cms_slot"
@@ -36,6 +38,7 @@ export default class SlotContainer extends Component {
   }
 
   handleDragover(event) {
+    this.setState({isDragover: true});
     event.preventDefault();
   }
 
@@ -84,13 +87,24 @@ export default class SlotContainer extends Component {
     } else {
       borderStyle = this.props.data.templateId === null ? '2px dashed red' : '2px dashed cyan';
     }
-    return {
+    let style = {
       position: 'absolute',
       border: borderStyle,
       top: (coordinate.top - 5) + 'px',
       left: (coordinate.left - 5) + 'px',
       width: (coordinate.width + 10) + 'px',
       height: (coordinate.height + 10) + 'px'
+    };
+
+    if (this.props.isWidgetOnDrag) {
+      style.background = 'rgba(236, 236, 247, 0.79)';
     }
+
+    if (this.state.isDragover) {
+      style.background = 'rgba(236, 236, 0, 0.79)';
+
+    }
+
+    return style;
   }
 }

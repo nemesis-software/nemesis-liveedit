@@ -5,12 +5,12 @@ import ConsolePopup from './backend-console-popup';
 export default class WidgetContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {openBackendConsolePopup: false, newWidgetData: null}
+    this.state = {openBackendConsolePopup: false, newWidgetData: null, isDragStart: false}
   }
 
   render() {
     return (
-      <div style={this.getStyles()} draggable="true" onDragStart={this.handleDragStart.bind(this)} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
+      <div style={this.getStyles()} draggable="true" onDragStart={this.handleDragStart.bind(this)} onDragEnd={this.onDragEnd.bind(this)} onDragOver={this.handleDragover.bind(this)} onDrop={this.handleDrop.bind(this)}>
         {this.state.openBackendConsolePopup ? <ConsolePopup open={this.state.openBackendConsolePopup}
                              newWidgetData={this.state.newWidgetData}
                              onClose={() => this.setState({...this.state, openBackendConsolePopup: false, newWidgetData: null})} />: false}
@@ -46,19 +46,33 @@ export default class WidgetContainer extends Component {
     }, err => console.log(err));
   }
 
+  onDragEnd(event) {
+    this.setState({isDragStart: false});
+    this.props.setDragState(false)
+  }
+
   handleDragStart(event) {
+    this.setState({isDragStart: true});
+    this.props.setDragState(true);
     event.dataTransfer.setData("itemData", JSON.stringify({id: this.props.data.id, slotId: this.props.data.slotId}));
   }
 
   getStyles() {
     let coordinate = this.props.data.coordinate;
-    return {
+    let style = {
       position: 'absolute',
-      border: '2px solid blue',
       top: (coordinate.top - 2) + 'px',
       left: (coordinate.left - 2) + 'px',
       width: (coordinate.width + 4) + 'px',
       height: (coordinate.height + 4) + 'px'
+    };
+
+    if (!this.props.isWidgetOnDrag || this.state.isDragStart) {
+      style.border = '2px solid blue';
+    } else {
+      style.display = 'none';
     }
+
+    return style;
   }
 }

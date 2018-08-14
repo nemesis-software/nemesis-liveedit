@@ -20,7 +20,7 @@ export default class Widget extends Component {
     );
     return (
       <OverlayTrigger placement="right" overlay={tooltip}>
-        <div className="widget-element" draggable={true} onDragStart={this.handleDragStart.bind(this)}>
+        <div className="widget-element" draggable={true} onDragStart={this.handleDragStart.bind(this)} onDragEnd={this.onDragEnd.bind(this)}>
           <div onClick={this.handleClickWidgetMenu.bind(this)} style={{position: 'absolute', top: '0', right: '0', background: '#53c6fc', height: '10px', width: '30px', zIndex: '5', cursor: 'pointer'}}>
             <i className="material-icons" style={{color: 'white', position: 'absolute', top: '-8px', left: '2px'}}>more_horiz</i>
           </div>
@@ -36,6 +36,11 @@ export default class Widget extends Component {
     );
   }
 
+  onDragEnd(e) {
+    console.log('dragEnd');
+    this.props.setDragState(false)
+  }
+
   handleClickWidgetMenu() {
     if (this.state.openBackendConsolePopup) {
       return;
@@ -45,6 +50,7 @@ export default class Widget extends Component {
   }
 
   handleDragStart(event) {
+    this.props.setDragState(true);
     event.dataTransfer.setData("itemData", JSON.stringify({id: this.props.widget.id, slotId: null}));
   }
 }

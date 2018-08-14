@@ -16,7 +16,7 @@ const initialElementSize = {top: Number.MAX_VALUE, left: Number.MAX_VALUE, right
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {isLiveEditEnabled: false, showAllSlots: false}
+    this.state = {isLiveEditEnabled: false, showAllSlots: false, isWidgetOnDrag: false}
   }
 
   componentWillMount() {
@@ -29,13 +29,13 @@ export default class App extends Component {
   render() {
     return (
       <div style={{zIndex: 100000000}}>
-        <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)}/>
+        <NavigationBar onToggleShowAll={this.onToggleShowAll.bind(this)} onToggleLiveEdit={this.onToggleLiveEdit.bind(this)} setDragState={this.setDragState.bind(this)}/>
         {this.state.isLiveEditEnabled ? <div style={{zIndex: '10000', position: 'absolute', top: '0', left: '0', width: '0', height: '0'}}>
           {this.getCmsElements().map((element, index) => {
             if (element.type === 'SLOT') {
-              return <SlotContainer key={index} data={element}/>
+              return <SlotContainer key={index} data={element} isWidgetOnDrag={this.state.isWidgetOnDrag}/>
             } else if (element.type === 'WIDGET') {
-              return <WidgetContainer key={index} data={element}/>
+              return <WidgetContainer setDragState={this.setDragState.bind(this)} key={index} data={element} isWidgetOnDrag={this.state.isWidgetOnDrag}/>
             } else if (element.type === 'MESSAGE_SOURCE') {
               return <MessageSourceContainer key={index} data={element}/>
             } else {
@@ -45,6 +45,10 @@ export default class App extends Component {
         </div> : false}
       </div>
     );
+  }
+
+  setDragState(state) {
+    this.setState({isWidgetOnDrag: state});
   }
 
   componentDidMount() {
@@ -137,7 +141,7 @@ export default class App extends Component {
       }
 
       if (slotWidgets.length > 0 && !_.isEqual(slotCoordinates, initialElementSize)) {
-        result.slots.push({id: slotId, pageId: slotPageId, templateId: slotTemplateId, coordinate: slotCoordinates, isDirty: isSlotDirty});
+        result.slots.push({id: slotId, pageId: slotPageId, templateId: slotTemplateId, slotPosition: slotPosition, coordinate: slotCoordinates, isDirty: isSlotDirty});
       } else if (slotWidgets.length === 0) {
         result.emptySlots.push({id: slotId, slotPosition: slotPosition, coordinate: slots[i].getBoundingClientRect()})
       }
@@ -227,7 +231,7 @@ export default class App extends Component {
     let elementsCoordinate = this.getElementSize();
     let result = [];
     _.forEach(elementsCoordinate.slots, item => {
-      result.push({type: 'SLOT', id: item.id, isDirty: item.isDirty, pageId: item.pageId, templateId: item.templateId, coordinate: this.getItemCoordinate(item)});
+      result.push({type: 'SLOT', id: item.id, slotPosition: item.slotPosition, isDirty: item.isDirty, pageId: item.pageId, templateId: item.templateId, coordinate: this.getItemCoordinate(item)});
     });
 
     _.forEach(elementsCoordinate.widgets, item => {

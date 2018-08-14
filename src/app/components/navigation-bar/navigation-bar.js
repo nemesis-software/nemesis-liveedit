@@ -82,7 +82,7 @@ export default class NavigationBar extends Component {
             {this.state.viewType === SEARCH_CONFIG ? <i className="material-icons">settings</i> : <i className="material-icons">search</i>}
           </div> : false}
         </div>
-        <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} isHidden={this.state.viewType !== LIVE_EDIT}/>
+        <WidgetPanel onToggleShowAll={this.props.onToggleShowAll} onToggleLiveEdit={this.props.onToggleLiveEdit} setDragState={this.props.setDragState} isHidden={this.state.viewType !== LIVE_EDIT}/>
         <PersonalizationPanel isHidden={this.state.viewType !== PERSONALIZATION}/>
         {this.state.hasSearchData ? <IndexQueryConfig isHidden={this.state.viewType !== SEARCH_CONFIG}/> : false}
         {this.state.viewType !== SEARCH_CONFIG ? <hr/> : false}

@@ -11,7 +11,7 @@ export default class WidgetLister extends Component {
   render() {
     return (
       <div className="widget-lister">
-        {this.props.widgets.map((item) => <Widget key={item.id} widget={item}/>)}
+        {this.props.widgets.map((item) => <Widget setDragState={this.props.setDragState} key={item.id} widget={item}/>)}
         <hr/>
         <AddNewWidget/>
       </div>

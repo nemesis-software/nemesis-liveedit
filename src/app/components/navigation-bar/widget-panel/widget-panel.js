@@ -32,7 +32,7 @@ export default class WidgetPanel extends Component {
             <input className="nemesis-cms-input" type="text" placeholder="Widget code" onChange={this.handleFilterInputChange.bind(this)}/>
           </div>
         </div>
-        <WidgetLister widgets={this.state.widgets}/>
+        <WidgetLister setDragState={this.props.setDragState} widgets={this.state.widgets}/>
       </div>
     )
   }
