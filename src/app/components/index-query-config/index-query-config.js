@@ -31,7 +31,7 @@ export default class IndexQueryConfig extends Component {
       <div className="index-query-config" style={this.getContainerStyle()}>
         {this.state.selectedSearch ?
           <div>
-            <div className="select-search-code">{this.state.selectedSearch.code}</div>
+            <div className="select-search-code">{this.state.selectedSearch.code}<span onClick={() => this.setState({selectedSearch: null})} className="close-button">x</span></div>
             <div style={{padding: '5px'}}>
               <Select style={{width: '100%'}}
                       clearable={false}

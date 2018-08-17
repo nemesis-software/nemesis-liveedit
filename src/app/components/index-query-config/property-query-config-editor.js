@@ -26,7 +26,7 @@ export default class PropertyQueryConfigEditor extends Component {
     const data = this.props.data.data;
     return (
       <div className="property-query-config-editor">
-        <div className="field-name">{this.props.data.name}</div>
+        <div className="field-name">{this.props.data.name} <span onClick={() => this.props.goBack()} className="close-button">x</span></div>
         <div className="fallback-from">{this.props.selectedSearch !== data.code ? `Fallback from: ${data.code}` : false}</div>
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Boost"} name={'boost'} value={data.boost}/>
         <NemesisTextField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Fuzziness"} name={'fuzziness'} value={data.fuzziness}/>
@@ -71,7 +71,7 @@ export default class PropertyQueryConfigEditor extends Component {
 
     let url = `https://localhost:8112/storefront/rest/${restUrl}`;
     ApiCall[restMethod](url, resultObject).then(result => {
-      alert('saved');
+      console.log('saved');
     })
   }
 

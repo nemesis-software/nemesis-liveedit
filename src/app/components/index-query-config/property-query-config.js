@@ -13,7 +13,7 @@ export default class PropertyQueryConfig extends Component {
     return (
       <div className="property-query-config">
         {this.state.selectedProperty ?
-          <PropertyQueryConfigEditor selectedSearch={this.props.selectedSearch} data={this.state.selectedProperty}/> :
+          <PropertyQueryConfigEditor goBack={() => this.setState({selectedProperty: null})} selectedSearch={this.props.selectedSearch} data={this.state.selectedProperty}/> :
           <div>
             <Select style={{width: '100%'}}
                     clearable={false}

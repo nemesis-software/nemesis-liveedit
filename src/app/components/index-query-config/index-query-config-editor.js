@@ -53,7 +53,7 @@ export default class IndexQueryConfigEditor extends Component {
 
     let url = `search_index_query_config/${this.props.data.id}`;
     ApiCall.patch(url, resultObject).then(result => {
-      alert('saved');
+      console.log('saved');
     })
   }
 

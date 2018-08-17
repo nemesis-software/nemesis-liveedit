@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import Widget from './widget';
 import AddNewWidget from "source/app/components/navigation-bar/widget-panel/add-new-widget";
+import CreateNewPage from "source/app/components/navigation-bar/widget-panel/create-new-page";
 
 export default class WidgetLister extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class WidgetLister extends Component {
         {this.props.widgets.map((item) => <Widget setDragState={this.props.setDragState} key={item.id} widget={item}/>)}
         <hr/>
         <AddNewWidget/>
+        <hr />
+        <CreateNewPage/>
       </div>
     );
   }
