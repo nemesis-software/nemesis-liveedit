@@ -19,7 +19,7 @@ export default class SlotContainer extends Component {
         {this.props.data.isDirty && !this.props.isWidgetOnDrag ? <div onClick={this.handleClickSlotMenu.bind(this)} style={{position: 'absolute', top: '-2px', right: '-2px', background: 'red', height: '20px', width: '20px', zIndex: '5'}}>
           <i className="material-icons" style={{color: 'white', position: 'absolute', top: '0', left: '0', fontSize: '20px'}}>sync_problem</i>
         </div> : false}
-        {this.state.isDragover ? <span style={{fontSize: '20px', padding: '3px'}}>{this.props.data.slotPosition}</span> : false}
+        {this.state.isDragover ? <span style={{fontSize: '20px', padding: '3px', pointerEvents: 'none'}}>{this.props.data.slotPosition}</span> : false}
         {this.state.openBackendConsolePopup ?
           <ConsolePopup open={this.state.openBackendConsolePopup}
                       entityId="cms_slot"

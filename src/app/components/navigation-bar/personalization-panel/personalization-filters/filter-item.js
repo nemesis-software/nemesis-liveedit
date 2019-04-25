@@ -19,7 +19,7 @@ export default class FilterItem extends Component {
 
   onSwitchToggle() {
     this.props.setLoadingScreen();
-    ApiCall.put(`${this.getBaseUrl()}/live-edit/filter/${Object.keys(this.props.filter)[0]}?site=${this.getSiteCode()}`).then(() => {
+    ApiCall.put(`${this.getBaseUrl()}/live-edit/filter/${Object.keys(this.props.filter)[0]}?site=${this.getSiteCode()}&sessionId=${this.getSessionId()}`).then(() => {
       window.location.reload();
     })
   }
@@ -31,5 +31,9 @@ export default class FilterItem extends Component {
 
   getSiteCode() {
     return document.getElementById('liveedit_data').getAttribute('data-site-code');
+  }
+
+  getSessionId() {
+    return document.getElementById('liveedit_data').getAttribute('data-session-id');
   }
 }

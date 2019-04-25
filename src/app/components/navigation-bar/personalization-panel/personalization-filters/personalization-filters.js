@@ -41,7 +41,8 @@ export default class PersonalizationFilters extends Component {
     this.props.setLoadingScreen();
     ApiCall.get(`${this.getBaseUrl()}/live-edit/filters?site=${this.getSiteCode()}`, {
       page: page,
-      size: size
+      size: size,
+      sessionId: document.getElementById('liveedit_data').getAttribute('data-session-id')
     }).then(result => {
       this.setState({filters: result.data.content, page: this.getPageData(result.data)}, () => {
         this.props.setLoadingScreen(false);
