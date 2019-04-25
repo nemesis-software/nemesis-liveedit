@@ -69,8 +69,7 @@ export default class PropertyQueryConfigEditor extends Component {
     let restMethod = !this.state.createForSpecifiedSearch && data.id ? 'patch' : 'post';
     let restUrl = !this.state.createForSpecifiedSearch && data.id ? `indexed_property_query_config/${data.id}` : 'indexed_property_query_config';
 
-    let url = `https://localhost:8112/storefront/rest/${restUrl}`;
-    ApiCall[restMethod](url, resultObject).then(result => {
+    ApiCall[restMethod](restUrl, resultObject).then(result => {
       console.log('saved');
     })
   }
