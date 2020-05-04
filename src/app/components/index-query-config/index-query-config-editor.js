@@ -26,7 +26,6 @@ export default class IndexQueryConfigEditor extends Component {
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Fuzzy Max Expansions"} name={'fuzzyMaxExpansions'} value={data.fuzzyMaxExpansions}/>
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Highlight Fragment Size"} name={'highlightFragmentSize'} value={data.highlightFragmentSize}/>
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Highlight Num Of Fragments"} name={'highlightNumOfFragments'} value={data.highlightNumOfFragments}/>
-        <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Max Page Size"} name={'maxPageSize'} value={data.maxPageSize}/>
         <NemesisNumberField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Page Size"} name={'pageSize'} value={data.pageSize}/>
         <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Default Sort Direction"} name={'defaultSortDirection'} values={['ASC', 'DESC']} value={['ASC', 'DESC'].indexOf(data.defaultSortDirection)}/>
         <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Multi Term Operator"} name={'multiTermOperator'} values={['AND', 'OR']} value={['AND', 'OR'].indexOf(data.multiTermOperator)}/>
