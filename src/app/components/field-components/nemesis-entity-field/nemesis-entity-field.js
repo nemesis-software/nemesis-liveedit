@@ -5,20 +5,28 @@ import ApiCall from '../../../services/api-call';
 import _ from 'lodash';
 import {Modal} from 'react-bootstrap';
 import NemesisBaseField from '../nemesis-base-field'
+import ConsolePopup from '../../backend-console-popup';
 
 import SelectCustomArrow from '../../helper-components/select-custom-arrow';
 
 export default class NemesisEntityField extends NemesisBaseField {
   constructor(props) {
     super(props);
-    this.state = {...this.state, openErrorDialog: false, errorMessage: null, openEmbeddedCreation: false};
+    this.state = {...this.state, openErrorDialog: false, errorMessage: null, openEmbeddedCreation: false, openBackendConsolePopup: false};
   }
 
   render() {
+  debugger;
     return (
       <div className="entity-field-container">
         <div className="entity-field-input-container">
-          <div><label>{this.props.label}</label></div>
+          <div>
+            {this.props.linkLabel === true ?
+            <a onClick={() => this.openConsolePopup()}>{this.props.label}</a>
+            :
+            <label>{this.props.label}</label>
+            }
+          </div>
 
             <AsyncSelect style={this.getSelectStyle()}
                           cache={false}
@@ -29,6 +37,11 @@ export default class NemesisEntityField extends NemesisBaseField {
                           value={this.state.value ? {value: this.state.value, label: this.getItemText(this.state.value)} : this.state.value}
                           onChange={(item) => this.onValueChange(item && item.value)}
                           loadOptions={this.filterEntityData.bind(this)}/>
+          {this.state.openBackendConsolePopup ? <ConsolePopup open={this.state.openBackendConsolePopup}
+                        entityId={this.props.entityId}
+                        entityName={this.props.entityId}
+                        itemId={this.state.value.id}
+                        onClose={() => this.setState({openBackendConsolePopup: false})} /> : false}
         </div>
         {!!this.state.errorMessage ? <div className="error-container">{this.state.errorMessage}</div> : false}
         {this.getErrorDialog()}
@@ -45,6 +58,9 @@ export default class NemesisEntityField extends NemesisBaseField {
     return style;
   }
 
+  openConsolePopup() {
+    this.setState({openBackendConsolePopup: true})
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!_.isEqual(this.props.value, nextProps.value)) {

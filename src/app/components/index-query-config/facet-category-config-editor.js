@@ -33,8 +33,8 @@ export default class FacetCategoryConfigEditor extends Component {
           <NemesisBooleanField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Color"} name={'color'} value={data.color} />
           <NemesisTextField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Values Sorter"} name={'facetValuesSorter'} value={data.facetValuesSorter}/>
           <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"category"} label={"Category"}
-          name={"category"} value={{code: data.categoryCode}} />
-          <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"search_facet_profile"} label={"Facet Profile"}  name={'facetProfile'} value={data.facetProfile} />
+          name={"category"} value={{code: data.categoryCode}}/>
+          <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"search_facet_profile"} label={"Facet Profile"}  name={'facetProfile'} value={data.facetProfile} linkLabel={true}/>
           <div style={{textAlign: 'center', marginTop: '10px'}}><button style={{width: '80%', padding: '7px 25px', height: '34px'}} className="nemesis-button success-button" onClick={this.onSaveButtonClick.bind(this)}>Save</button></div>
       </div>
     );

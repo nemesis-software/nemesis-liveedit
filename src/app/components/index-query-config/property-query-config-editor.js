@@ -30,6 +30,7 @@ export default class PropertyQueryConfigEditor extends Component {
 
   render() {
     const data = this.props.data.data;
+    debugger;
     return (
         <div className="property-query-config-editor">
             <div className="field-name">{this.props.data.name} <span onClick={() => this.props.goBack()} className="close-button">x</span></div>
@@ -42,7 +43,7 @@ export default class PropertyQueryConfigEditor extends Component {
                     <NemesisEnumField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Sort Direction"} name={'sortDirection'} values={['ASC', 'DESC']} value={['ASC', 'DESC'].indexOf(data.sortDirection)}/>
                     <NemesisBooleanField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Sortable"} name={'sortable'} value={data.sortable} />
                     <NemesisBooleanField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} label={"Highlight"} name={'highlight'} value={data.highlight} />
-                    <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"search_facet"} label={"Facet"} name={'searchFacet'} value={data.searchFacet} /><i className="material-icons" style={{cursor: 'pointer'}} onClick={() =>  {}}>launch</i>
+                    <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"search_facet"} label={"Facet"} name={'searchFacet'} value={data.searchFacet} linkLabel={true}/>
                     <label>Facet Category Configs</label>
                     {this.state.facetCategoryConfigs.map(prop => <div className="property-query-item" onClick={() => this.setState({selectedFacetCategoryConfigProperty: prop})} key={prop.code}>{prop.code}</div>)}
 
