@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 import ApiCall from '../../../services/api-call';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 export default class LogNewUser extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ export default class LogNewUser extends Component {
   render() {
     return (
       <div className="log-new-user">
-        <Select.Async cache={false}
+        <AsyncSelect cache={false}
                       value={this.state.value ? {value: this.state.value, label: this.state.value.code} : this.state.value}
                       onChange={(item) => this.onValueChange(item && item.value)}
                       loadOptions={this.getUsers.bind(this)}/>
@@ -27,16 +28,15 @@ export default class LogNewUser extends Component {
 
   getUsers(inputText) {
     let inputTextActual = inputText || '';
-    return ApiCall.get('customer', {
+    return ApiCall.get('customer/search/findByCodeLike', {
       page: 0,
       size: 10,
-      catalogCode: `%${inputTextActual}%`,
       code: `%${inputTextActual}%`,
       projection: 'search'
     }).then(result => {
       let data = [];
       _.forIn(result.data._embedded, (value) => data = data.concat(value));
-      return {options: data.map(this.mapDataSource.bind(this))};
+      return data.map(this.mapDataSource.bind(this));
     })
   }
 

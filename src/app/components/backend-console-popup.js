@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-bootstrap/lib/Modal';
+import {Modal} from 'react-bootstrap';
 
 export default class BackendConsolePopup extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ export default class BackendConsolePopup extends Component {
 
   render() {
     return (
-      <Modal bsSize="lg" show={this.props.open} onHide={this.props.onClose} backdrop="static">
+      <Modal size="large" show={this.props.open} onHide={this.props.onClose} backdrop="static">
         <Modal.Body>
           <iframe style={{width: '100%', height: '600px'}} src={this.buildIFrameUrl()}></iframe>
         </Modal.Body>

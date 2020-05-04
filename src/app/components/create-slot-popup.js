@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-bootstrap/lib/Modal';
+import {Modal} from 'react-bootstrap';
 import SlotService from '../services/slot-service'
 
 export default class BackendConsolePopup extends Component {

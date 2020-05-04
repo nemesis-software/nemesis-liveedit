@@ -1,56 +1,110 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: [
     './src/index.js'
   ],
   output: {
-    path: '/home/teo/work/nemesis-archetype/src/main/webapp/resources/theme/common/js',
+    path: '/home/petar/workspace/nemesis-archetype-master/src/main/webapp/resources/theme/common/js',
     publicPath: '/',
     filename: 'liveEdit.js'
   },
   module: {
-    loaders: [
+    rules: [
       {
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['react', 'es2015', 'stage-1']
+        loader: "babel-loader",
+        options: {
+          presets: ["@babel/preset-env", "@babel/preset-react"]
         }
       },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.less$/, loader: "style!css!less" },
       {
-        test: /\.png$/,
-        loader: "url-loader?limit=100000"
+        test: /\.css$/,
+     	use: [
+            'style-loader',
+            'css-loader'
+        ]
       },
-      {
-        test: /\.jpg$/,
-        loader: "file-loader"
-      },
-      {
-        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff'
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream'
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file'
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
-      }
+        {
+            test: /\.less$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                'less-loader'
+            ]
+        },
+        {
+            test: /\.png$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000
+                    }
+                }
+            ]
+        },
+        {
+            test: /\.jpg$/,
+            use: [
+                {
+                    loader: 'file-loader'
+                }
+            ]
+        },
+        {
+            test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000,
+                        mimetype: 'application/font-woff'
+                    }
+                }
+            ]
+        },
+        {
+            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000,
+                        mimetype: 'application/octet-stream'
+                    }
+                }
+            ]
+        },
+        {
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            use: [
+                {
+                    loader: 'file-loader'
+                }
+            ]
+        },
+        {
+            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000,
+                        mimetype: 'image/svg+xml'
+                    }
+                }
+            ]
+        }
     ]
   },
   resolve: {
     alias: {
-      source: __dirname+ '/src',
+      source: path.join(__dirname, 'src'),
     },
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     historyApiFallback: true,

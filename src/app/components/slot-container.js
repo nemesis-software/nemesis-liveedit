@@ -6,7 +6,6 @@ import CreateSlotPopup from './create-slot-popup';
 export default class SlotContainer extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {openBackendConsolePopup: false, openCreateSlotPopup: false, droppedWidgetId: null, oldSlotId: null, newWidgetData: null, isDragover: false};
   }
 

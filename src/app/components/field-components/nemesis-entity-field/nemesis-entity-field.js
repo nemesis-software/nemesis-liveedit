@@ -1,8 +1,9 @@
 import React from 'react';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import ApiCall from '../../../services/api-call';
 import _ from 'lodash';
-import Modal from 'react-bootstrap/lib/Modal';
+import {Modal} from 'react-bootstrap';
 import NemesisBaseField from '../nemesis-base-field'
 
 import SelectCustomArrow from '../../helper-components/select-custom-arrow';
@@ -19,8 +20,9 @@ export default class NemesisEntityField extends NemesisBaseField {
         <div className="entity-field-input-container">
           <div><label>{this.props.label}</label></div>
 
-            <Select.Async style={this.getSelectStyle()}
+            <AsyncSelect style={this.getSelectStyle()}
                           cache={false}
+                          isClearable={true}
                           arrowRenderer={() => <SelectCustomArrow/>}
                           className={'entity-field' + (!!this.state.errorMessage ? ' has-error' : '') + (this.props.required && !this.props.readOnly && this.isEmptyValue() ? ' empty-required-field' : '')}
                           disabled={this.props.readOnly}
@@ -73,7 +75,7 @@ export default class NemesisEntityField extends NemesisBaseField {
     return ApiCall.get(this.getSearchUrl(), params).then(result => {
       let data = [];
       _.forIn(result.data._embedded, (value) => data = data.concat(value));
-      return {options: data.map(this.mapDataSource.bind(this))};
+      return data.map(this.mapDataSource.bind(this));
     }, this.handleRequestError.bind(this))
   }
 

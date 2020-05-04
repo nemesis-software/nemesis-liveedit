@@ -6,7 +6,7 @@ import WidgetContainer from './widget-container';
 import MessageSourceContainer from './message-source-container';
 import NavigationBar from './navigation-bar/navigation-bar';
 
-import 'react-select/dist/react-select.css';
+//import 'react-select/dist/react-select.css';
 
 import '../../styles/style.less';
 
