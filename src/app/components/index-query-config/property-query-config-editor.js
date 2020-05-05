@@ -16,12 +16,14 @@ export default class PropertyQueryConfigEditor extends Component {
 
   componentWillMount() {
     this.fieldsReferences = [];
-    let baseUrl = document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
+    if (this.props.data.data.searchFacet) {
+        let baseUrl = document.getElementById('liveedit_data').getAttribute('data-rest-base-url');
         let url = `${baseUrl}/facade/search/facetCategoryConfig/facet/${this.props.data.data.searchFacet.code}`
         ApiCall.get(url).then(result => {
           let data = result.data;
           this.setState({facetCategoryConfigs: data});
-    })
+        })
+    }
   }
 
   componentWillUpdate() {
