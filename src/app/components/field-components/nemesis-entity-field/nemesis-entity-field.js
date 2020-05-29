@@ -16,7 +16,6 @@ export default class NemesisEntityField extends NemesisBaseField {
   }
 
   render() {
-  debugger;
     return (
       <div className="entity-field-container">
         <div className="entity-field-input-container">
@@ -30,7 +29,7 @@ export default class NemesisEntityField extends NemesisBaseField {
 
             <AsyncSelect style={this.getSelectStyle()}
                           cache={false}
-                          isClearable={true}
+                          isClearable={this.props.isClearable}
                           arrowRenderer={() => <SelectCustomArrow/>}
                           className={'entity-field' + (!!this.state.errorMessage ? ' has-error' : '') + (this.props.required && !this.props.readOnly && this.isEmptyValue() ? ' empty-required-field' : '')}
                           disabled={this.props.readOnly}
