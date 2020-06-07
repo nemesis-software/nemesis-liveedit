@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import UserDetailsRenderer from './user-details-renderer';
-import LogNewUser from './log-new-user';
 import Select from 'react-select';
-import PersonalizationFilter from './personalization-filters/personalization-filters'
 import axios from 'axios';
 
-export default class PersonalizationPanel extends Component {
+export default class PagePanel extends Component {
   constructor(props) {
     super(props);
     let preference = document.getElementById('liveedit_data').getAttribute('data-ui-experience');
@@ -37,17 +34,7 @@ export default class PersonalizationPanel extends Component {
           <i className="material-icons loading-icon">cached</i>
         </div> : false}
         <div className="user-container">
-        {!this.state.isInLoggingState ?
-          <div><UserDetailsRenderer user={this.state.user}/>
-            <div style={{padding: '0 10px'}}>
-              {this.state.user && this.state.user.username === 'anonymous' ?
-                <div className="nemesis-button success-button" style={{width: '100%', height: 'unset', textAlign: 'center'}} onClick={this.onLoginClick.bind(this)}>login</div> :
-                <div className="nemesis-button success-button" style={{width: '100%', height: 'unset', textAlign: 'center'}} onClick={this.onLogoutClick.bind(this)}>logout</div>
-              }
-            </div>
-          </div>
-          : <LogNewUser setLoadingScreen={this.setLoadingScreen.bind(this)}/>
-        }
+            Select Email Page:
         </div>
         <hr/>
         <div style={{padding: '0 5px'}}>
@@ -58,7 +45,17 @@ export default class PersonalizationPanel extends Component {
                   options={[{value: 'normal', label: 'NORMAL'}, {value: 'mobile', label: 'MOBILE'}, {value: 'tablet', label: 'TABLET'}]}/>
         </div>
         <hr/>
-        <PersonalizationFilter setLoadingScreen={this.setLoadingScreen.bind(this)}/>
+        <div className="user-container">
+            Select Invoice Page:
+        </div>
+        <hr/>
+        <div style={{padding: '0 5px'}}>
+          <Select cache={false}
+                  clearable={false}
+                  value={this.state.preference ? {value: this.state.preference, label: this.state.preference} : this.state.preference}
+                  onChange={(item) => this.onSitePreferencesChange(item && item.value)}
+                  options={[{value: 'normal', label: 'NORMAL'}, {value: 'mobile', label: 'MOBILE'}, {value: 'tablet', label: 'TABLET'}]}/>
+        </div>
       </div>
     );
   }

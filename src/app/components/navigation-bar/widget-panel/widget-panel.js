@@ -26,6 +26,7 @@ export default class WidgetPanel extends Component {
 
   render() {
     let siteThemeCode = document.getElementById('liveedit_data').getAttribute('data-site-theme-code');
+    let siteThemeId = document.getElementById('liveedit_data').getAttribute('data-site-theme-id');
     let pageCode = document.getElementById('liveedit_data').getAttribute('page-code');
     return (
       <div style={this.getContainerStyle()}>
@@ -39,7 +40,7 @@ export default class WidgetPanel extends Component {
           <hr/>
           <div style={{padding: '0 5px'}}>
               <NemesisEntityField ref={(fieldPanel) => {fieldPanel && this.fieldsReferences.push(fieldPanel)}} entityId={"site_theme"} label={"Theme"}
-              value={{code:siteThemeCode}} onValueChange={(item) => this.onSiteThemeChange(item && item.code)}
+              value={{id:siteThemeId,code:siteThemeCode}} onValueChange={(item) => this.onSiteThemeChange(item && item.code)}
               name={'site_theme'} linkLabel={true}/>
           </div>
           <hr/>

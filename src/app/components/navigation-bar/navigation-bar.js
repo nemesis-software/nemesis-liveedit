@@ -75,10 +75,10 @@ export default class NavigationBar extends Component {
              onMouseUp={() => this.isHoldOnTopBar = false}>
           Cms Nav Bar
           <div title="Close live edit" className="clear-live-edit" onClick={this.clearLiveEdit.bind(this)}>x</div>
-          <div title="SwitchView" className="switch-personalization" onClick={() => this.onViewSwitch(PERSONALIZATION)}>
+          <div title="Personalization" className="switch-personalization" onClick={() => this.onViewSwitch(PERSONALIZATION)}>
             {this.state.viewType === PERSONALIZATION ? <i className="material-icons">settings</i> : <i className="material-icons">person</i>}
           </div>
-          {this.state.hasSearchData ? <div title="SwitchView" className="switch-search" onClick={() => this.onViewSwitch(SEARCH_CONFIG)}>
+          {this.state.hasSearchData ? <div title="Search" className="switch-search" onClick={() => this.onViewSwitch(SEARCH_CONFIG)}>
             {this.state.viewType === SEARCH_CONFIG ? <i className="material-icons">settings</i> : <i className="material-icons">search</i>}
           </div> : false}
         </div>
