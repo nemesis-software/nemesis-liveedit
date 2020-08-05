@@ -24,7 +24,7 @@ export default class BackendConsolePopup extends Component {
     let dataElement = $('#liveedit_data')[0];
     let baseUrl = dataElement.getAttribute('data-backend-url');
     if (this.props.newWidgetData) {
-      return `${baseUrl}#type=nemesisNewWidget&slotId=${this.props.newWidgetData.slotId}&iframePreview=true`;
+      return `${baseUrl}admin#type=nemesisNewWidget&slotId=${this.props.newWidgetData.slotId}&iframePreview=true`;
     }
     if (this.props.newPageData) {
       let templateCode = dataElement.getAttribute('template-code');
@@ -32,8 +32,8 @@ export default class BackendConsolePopup extends Component {
       let catalogVersionCode = dataElement.getAttribute('data-catalog-version');
       let catalogVersionId = dataElement.getAttribute('current-catalog-version-id');
       let catalogCode = dataElement.getAttribute('current-catalog-code');
-      return `${baseUrl}#type=nemesisNewPage&templateId=${templateId}&templateCode=${templateCode}&catalogVersionId=${catalogVersionId}&catalogCode=${catalogCode}:${catalogVersionCode}&iframePreview=true`;
+      return `${baseUrl}admin#type=nemesisNewPage&templateId=${templateId}&templateCode=${templateCode}&catalogVersionId=${catalogVersionId}&catalogCode=${catalogCode}:${catalogVersionCode}&iframePreview=true`;
     }
-    return `${baseUrl}#type=SINGLE_ITEM&itemId=${this.props.itemId}&entityId=${this.props.entityId}&entityName=${this.props.entityName}&iframePreview=true`;
+    return `${baseUrl}admin#type=SINGLE_ITEM&itemId=${this.props.itemId}&entityId=${this.props.entityId}&entityName=${this.props.entityName}&iframePreview=true`;
   }
 }
